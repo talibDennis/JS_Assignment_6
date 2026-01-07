@@ -1,9 +1,22 @@
 /* ===== Global html ===== */
-section-header
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gray-900); /* match site background */
+}
+
+/* main grows to push footer down */
+main {
+  flex: 1 0 auto;
+}
+
 /* ============================
 ========= HEADER HTML =========
 ============================ */
 .header {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -379,7 +392,10 @@ section-header
   margin-bottom: var(--space-8);
 }
 
+
 /* ********* Media ********* */
+
+
 .movies, .tv {
   padding: var(--space-12) 0;
 }
@@ -659,7 +675,7 @@ section-header
 /* ***** Search Card ***** */
 .search-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
   gap: var(--space-1);
 }
 
@@ -1200,9 +1216,9 @@ section-header
   }
 }
 
+
 /* ===== Footer ===== */
 .footer {
-  height: 525px;
   bottom: 0;
   margin-top: auto;
   padding: var(--space-20) 0 var(--space-8);

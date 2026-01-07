@@ -89,7 +89,7 @@
   scroll-behavior: smooth;
 }
 
-html, body {
+body {
   font-family: var(--font-family);
   line-height: var(--line-height-body);
   color: var(--gray-900);

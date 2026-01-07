@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta cahrset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height">
+    <meta name="author" content="Joseph Dennis">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/global_styles.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/lightbox.css">
+    <script src="js/jquery.js" async defer></script>
+    <script src="js/lightbox.js" async defer></script>
+    <script src="js/Movie.js" async defer></script>
+    <script src="js/search.js" async defer></script>
+    <title>Fadeout</title>
+  </head>
+
+<body>
+  <!-- Header Section -->
+  <app-header>
+    <header class="header" [class.hidden]="isHeaderHidden">
+      <nav class="nav">
+        <div class="container">
+          <div class="nav-content">
+            <div class="nav-brand">
+              <a routerLink="/" class="nav-brand-link" (click)="closeMobileMenu()">
+                <img class="nav-brand-logo" src="assets/images/filmLogo.png" alt="Fadeout">
+                <span class="nav-brand-text"></span>
+              </a>
+            </div>
+            
+            <div class="nav-links">
+              <a href="index.html">Movies</a>
+              <a href="index.html">TV Shows</a>
+              <a href="watchlist.html">Watchlist</a>
+              <a href="#search">Search</a>
+            </div>
+            
+            <div class="nav-actions">
+              <a class="cart-link" title="Nav Actions">
+                <div class="cart-icon">
+                  <img class="nav-action-icons" src="assets/images/dragonbit-64.png" alt="dragonbit">
+                  <img class="nav-action-icons" src="assets/images/linkedin-64.png" alt="linkedin">
+                  <img class="nav-action-icons" src="assets/images/twitter-64.png" alt="twitter">
+                </div>
+              </a>
+            </div>
+            
+            <button class="mobile-menu-btn" onclick='toggleMenu();'>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+            </button>
+          </div>
+        </div>
+      </nav>
+      
+      <div class="mobile-menu" [class.open]="mobileMenuOpen">
+        <div class="mobile-menu-content">
+          <a href="#movies">Movies</a>
+          <a href="#tv">TV Shows</a>
+          <a href="watchlist.html">Watchlist</a>
+          <a href="search.html">Search</a>
+          <div class="mobile-menu-divider"></div>
+          <div class="mobile-auth-buttons">
+            <a routerLink="/login" (click)="closeMobileMenu()" class="nav-action-link mobile-btn">Login</a>
+            <a routerLink="/register" (click)="closeMobileMenu()" class="nav-action-primary-link mobile-btn">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </header>
+  </app-header>
+
+  <main class="main-content">
+    
+    <!-- Search Box -->
+    <section class="search" id="search">
+      <div class="container">
+        <div class="section-header">
+          <div class="search-bar">
+            <input id="txtSearch" type="text" placeholder="search for movie">
+            <button type=" button" onclick="searchMovies();">Search!</button>
+          </div>
+          <!-- Trigger(s) -->
+          <div>
+            <!-- (Optional) Poster as a trigger -->
+            <div>
+              <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg"
+              alt="Captain Hook: The Cursed Tides poster"
+              class="poster-trigger"
+              data-dialog="movie-hero-dialog">
+            </div>
+            <div>
+              <button class="open-hero btn btn--primary" data-dialog="movie-hero-dialog">
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> <!-- Search Box -->
+
+    <!-- Search Results -->
+    <section>
+      <div class="search-grid">
+        <div class="search-card sCard">
+      </div>
+    </section> <!-- Search Results -->
+
+    <section> <!-- Lightbox -->
+      <!-- Lightbox Dialog -->
+      <dialog id="movie-hero-dialog" class="lightbox" aria-label="Movie details">
+        <!-- <div class="lightbox__backdrop" aria-hidden="true">
+          <img src="https://image.tmdb.org/t/p/original/eI5XeJqEF7Lt14NswOWjwwRnPXs.jpg" alt="Captain Hook: The Cursed Tides poster">
+        </div> -->
+        <div class="lightbox__content" role="document">
+          <!-- Close -->
+          <button class="lightbox__close" aria-label="Close">✕</button>
+
+          <!-- === Movie Details Layout === -->
+          <section class="movie-hero" aria-label="Movie details">
+            <div class="movie-hero__content">
+              <!-- Left: Poster Card -->
+              <aside class="poster-card" aria-label="Poster">
+                <figure class="poster-card__figure">
+                  <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg" alt="Captain Hook: The Cursed Tides poster">
+                  <figcaption class="sr-only">Now streaming</figcaption>
+                </figure>
+                <div class="poster-card__cta">
+                  <img src="assets/hooke-logo.svg" class="poster-card__service-logo" alt="Hooke service logo">
+                  <a href="#watch" class="btn btn--primary">Watch Now</a>
+                </div>
+              </aside> <!-- Left: Poster Card -->
+
+              <!-- Right: Info Panel -->
+              <div class="info-panel">
+
+                <!-- Movie Trailer -->
+                <div class="video-embed" aria-label="Trailer">
+                  <iframe
+                    class="video-embed__frame"
+                    src="assets/Chaos.2005.1080p.BluRay.x264.AAC5.1-[YTS.MX].mp4"
+                    title="Captain Hook: The Cursed Tides — Trailer"
+                    loading="lazy"
+                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    referrerpolicy="strict-origin-when-cross-origin">
+                  </iframe>
+                </div>
+
+                <!-- Movie Info -->
+                <header class="info-panel__header">
+                  <h1 class="title">
+                    Captain Hook: <span class="title__alt">The Cursed Tides</span>
+                    <span class="title__year">(2025)</span>
+                  </h1>
+                  <ul class="meta">
+                    <li>07/11/2025</li>
+                    <li>GB</li>
+                    <li>Adventure, Action, Horror</li>
+                    <li>1h 30m</li>
+                  </ul>
+                </header>
+
+                <section class="score-actions" aria-label="User score and actions">
+                  <div class="score-badge" aria-label="User Score 49 out of 100">
+                    <span class="score-badge__value">49</span>
+                    <span class="score-badge__label">User Score</span>
+                  </div>
+
+                  <nav class="actions" aria-label="Quick actions">
+                    <button class="icon-btn" aria-label="Add to favorites">❤️</button>
+                    <button class="icon-btn" aria-label="Add to list">➕</button>
+                    <button class="icon-btn" aria-label="Share">🔗</button>
+                    <a href="#trailer" class="btn btn--ghost">▶ Play Trailer</a>
+                  </nav>
+                </section>
+
+                <p class="tagline">Blood flows like the tide.</p>
+
+                <section class="overview">
+                  <h2 class="sr-only">Overview</h2>
+                  <p>
+                    In the aftermath of a devastating defeat by his archenemesis Admiral Smee,
+                    Captain Hook finds refuge in the coastal town of Eldritch Landing.
+                  </p>
+                </section>
+
+                <section class="credits">
+                  <div class="credit">
+                    <span class="credit__name">Lars Janssen</span>
+                    <span class="credit__role">Director, Writer</span>
+                  </div>
+                  <div class="credit">
+                    <span class="credit__name">J.M. Barrie</span>
+                    <span class="credit__role">Writer</span>
+                  </div>
+                </section>
+              </div> <!-- Right: Info Panel -->
+            </div> <!-- Movie Details Content -->
+
+            <!-- Background image for the hero -->
+            <div class="movie-hero__bg" role="img" aria-label="Background art"></div>
+          </section> <!-- === /Movie Details Layout === -->
+        </div> <!-- Lightbox Content -->
+      </dialog> <!-- Lightbox Dialog -->
+    </section> <!-- Lightbox -->
+  </main>

@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta cahrset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height">
+    <meta name="author" content="Joseph Dennis">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="css/movie.css">
+    <script src="js/jquery.js" async defer></script>
+    <script src="js/Movie.js" async defer></script>
+    <script src="js/search.js" async defer></script>
+    <title>Fadeout</title>
+  </head>
+
+<!-- Movie Details Layout -->
+<section class="movie-hero" aria-label="Movie details">
+  <div class="movie-hero__content">
+    <!-- Left: Poster Card -->
+    <aside class="poster-card" aria-label="Poster">
+      <figure class="poster-card__figure">
+        <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg" alt="Captain Hook: The Cursed Tides poster" />
+        <figcaption class="sr-only">Now streaming</figcaption>
+      </figure>
+
+      <div class="poster-card__cta">
+        <img class="poster-card__service-logo" src="assets/hooke-logo.svg" alt="Hooke" />
+        <a class="btn btn--primary" href="#watch" aria-label="Watch now on Hooke">Watch Now</a>
+      </div>
+    </aside>
+
+    <!-- Right: Info Panel over Hero Background -->
+    <div class="info-panel">
+      <!-- Title Row -->
+      <header class="info-panel__header">
+        <h1 class="title">
+          Captain Hook: <span class="title__alt">The Cursed Tides</span>
+          <span class="title__year">(2025)</span>
+        </h1>
+
+        <ul class="meta">
+          <li><span aria-hidden="true">🗓️</span> 07/11/2025</li>
+          <li>GB</li>
+          <li>Adventure, Action, Horror</li>
+          <li>1h 30m</li>
+        </ul>
+      </header>
+
+      <!-- Score + Actions -->
+      <section class="score-actions" aria-label="User score and actions">
+        <div class="score-badge" aria-label="User Score 49 out of 100">
+          <span class="score-badge__value">49</span>
+          <span class="score-badge__label">User Score</span>
+        </div>
+
+        <nav class="actions" aria-label="Quick actions">
+          <button class="icon-btn" aria-label="Add to favorites">❤️</button>
+          <button class="icon-btn" aria-label="Add to list">➕</button>
+          <button class="icon-btn" aria-label="Share">🔗</button>
+          <a class="btn btn--ghost" href="#trailer" aria-label="Play trailer">▶ Play Trailer</a>
+        </nav>
+      </section>
+
+      <!-- Tagline -->
+      <p class="tagline">Blood flows like the tide.</p>
+
+      <!-- Overview -->
+      <section class="overview">
+        <h2 class="sr-only">Overview</h2>
+        <p>
+          In the aftermath of a devastating defeat by his archenemesis Admiral Smee,
+          Captain Hook finds refuge in the coastal town of Eldritch Landing.
+        </p>
+      </section>
+
+      <!-- Credits -->
+      <section class="credits">
+        <div class="credit">
+          <span class="credit__name">Lars Janssen</span>
+          <span class="credit__role">Director, Writer</span>
+        </div>
+        <div class="credit">
+          <span class="credit__name">J.M. Barrie</span>
+          <span class="credit__role">Writer</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Background image for the hero -->
+  <div class="movie-hero__bg" role="img" aria-label="Captain Hook background art"></div>
+</section>

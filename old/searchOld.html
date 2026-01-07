@@ -14,11 +14,11 @@
     <script src="js/search.js" async defer></script>
     <title>Fadeout</title>
   </head>
-
+getMovieDetails
   <body>
     <app-root>
       <div class="app">
-        <!-- SECTION: Header Section -->
+        <!-- Header Section -->
         <app-header>
           <header class="header" [class.hidden]="isHeaderHidden">
             <nav class="nav">
@@ -34,23 +34,21 @@
                   <div class="nav-links">
                     <a href="index.html">Movies</a>
                     <a href="index.html">TV Shows</a>
-                    <a href="#watchlist">Watchlist</a>
-                    <a href="search.html">Search</a>
+                    <a href="watchlist.html">Watchlist</a>
+                    <a href="#search">Search</a>
                   </div>
                   
                   <div class="nav-actions">
                     <a class="cart-link" title="Nav Actions">
                       <div class="cart-icon">
-                        <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon" onclick="toggleMoviePanel();">
-                        <img class="nav-action-icons" src="assets/images/moreIconWhite.svg" alt="moreIcon">
-                        <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon">
-                        <img class="nav-action-icons" src="assets/images/searchIconBlue.svg" alt="searchIcon">
-                        <!-- <span class="cart-badge">0</span> -->
+                        <img class="nav-action-icons" src="assets/images/dragonbit-64.png" alt="dragonbit">
+                        <img class="nav-action-icons" src="assets/images/linkedin-64.png" alt="linkedin">
+                        <img class="nav-action-icons" src="assets/images/twitter-64.png" alt="twitter">
                       </div>
                     </a>
                   </div>
                   
-                  <button class="mobile-menu-btn" (click)="toggleMobileMenu()" [class.open]="mobileMenuOpen">
+                  <button class="mobile-menu-btn" onclick='toggleMenu();'>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
@@ -61,10 +59,10 @@
             
             <div class="mobile-menu" [class.open]="mobileMenuOpen">
               <div class="mobile-menu-content">
-                <a (click)="closeMobileMenu()">Movies</a>
-                <a (click)="closeMobileMenu()">TV Shows</a>
-                <a (click)="closeMobileMenu()">Watchlist</a>
-                <a (click)="closeMobileMenu()">Search</a>
+                <a href="#movies">Movies</a>
+                <a href="#tv">TV Shows</a>
+                <a href="watchlist.html">Watchlist</a>
+                <a href="search.html">Search</a>
                 <div class="mobile-menu-divider"></div>
                 <div class="mobile-auth-buttons">
                   <a routerLink="/login" (click)="closeMobileMenu()" class="nav-action-link mobile-btn">Login</a>
@@ -75,117 +73,39 @@
           </header>
         </app-header>
 
-
-        <!-- Lightbox Dialog -->
-        <dialog id="movie-hero-dialog" class="lightbox" aria-label="Movie details">
-          <div class="lightbox__backdrop" aria-hidden="true"></div>
-          <div class="lightbox__content" role="document">
-            <!-- Close -->
-            <button class="lightbox__close" aria-label="Close">✕</button>
-
-        <!-- SECTION: Movie Details Layout -->
-        <main>
-          <section class="movie-hero" aria-label="Movie details">
-            <div class="movie-hero__content">
-              <!-- Left: Poster Card -->
-              <aside class="poster-card" aria-label="Poster">
-                <figure class="poster-card__figure">
-                  <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg" alt="Captain Hook: The Cursed Tides poster" />
-                  <figcaption class="sr-only">Now streaming</figcaption>
-                </figure>
-
-                <div class="poster-card__cta">
-                  <img class="poster-card__service-logo" src="https://image.tmdb.org/t/p/original/zPzrfTf8KmCt4YlyEGMBSaFkUB6.png" alt="Hooke" />
-                  <a class="btn btn--primary" href="#watch" aria-label="Watch now on Hooke">Watch Now</a>
+        <!-- Search Section -->
+          <section class="search" id="search">
+            <div class="container">
+              <div class="section-header">
+                <div class="search-bar">
+                  <input id="txtSearch" type="text" placeholder="search for movie">
+                  <button type=" button" onclick="searchMovies();">Search!</button>
                 </div>
-              </aside>
+              </div>
 
-              <!-- Right: Info Panel over Hero Background -->
-              <div class="info-panel">
-                <div class="video-embed" aria-label="Trailer">
-                  <!-- Movie Trailer -->
-                  <iframe
-                    class="video-embed__frame"
-                    src="assets/Chaos.2005.1080p.BluRay.x264.AAC5.1-[YTS.MX].mp4"
-                    title="Captain Hook: The Cursed Tides — Trailer"
-                    poster="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg"
-                    muted="true"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                    referrerpolicy="strict-origin-when-cross-origin">
-                  </iframe>
+              <div class="panel-grid">
+                <div id="controls id">
+                  <span class="closeBtn" onclick="toggleMoviePanel();">X</span>
                 </div>
-                <!-- Title Row -->
-                <header class="info-panel__header">
-                  <h1 class="title">
-                    Captain Hook: <span class="title__alt">The Cursed Tides</span>
-                    <span class="title__year">(2025)</span>
-                  </h1>
+              </div>
 
-                  <ul class="meta">
-                    <li><span aria-hidden="true">🗓️</span> 07/11/2025</li>
-                    <li>GB</li>
-                    <li>Adventure, Action, Horror</li>
-                    <li>1h 30m</li>
-                  </ul>
-                </header>
-
-                <!-- Score + Actions -->
-                <section class="score-actions" aria-label="User score and actions">
-                  <div class="score-badge" aria-label="User Score 49 out of 100">
-                    <span class="score-badge__value">49</span>
-                    <span class="score-badge__label">User Score</span>
-                  </div>
-
-                  <nav class="actions" aria-label="Quick actions">
-                    <button class="icon-btn" aria-label="Add to favorites">❤️</button>
-                    <button class="icon-btn" aria-label="Add to list">➕</button>
-                    <button class="icon-btn" aria-label="Share">🔗</button>
-                    <a class="btn btn--ghost" href="#trailer" aria-label="Play trailer">▶ Play Trailer</a>
-                  </nav>
-                </section>
-
-                <!-- Tagline -->
-                <p class="tagline">Blood flows like the tide.</p>
-
-                <!-- Overview -->
-                <section class="overview">
-                  <h2 class="sr-only">Overview</h2>
-                  <p>
-                    In the aftermath of a devastating defeat by his archenemesis Admiral Smee,
-                    Captain Hook finds refuge in the coastal town of Eldritch Landing.
-                  </p>
-                </section>
-
-                <!-- Credits -->
-                <section class="credits">
-                  <div class="credit">
-                    <span class="credit__name">Lars Janssen</span>
-                    <span class="credit__role">Director, Writer</span>
-                  </div>
-                  <div class="credit">
-                    <span class="credit__name">J.M. Barrie</span>
-                    <span class="credit__role">Writer</span>
-                  </div>
-                </section>
+              <!-- first row -->
+              <div class="search-grid">
+                <div class="search-card sCard">
               </div>
             </div>
-
-            <!-- Background image for the hero -->
-            <div class="movie-hero__bg" role="img" aria-label="Captain Hook background art"></div>
           </section>
         </main>
 
-        <!-- SECTION: Footer -->
+        <!-- Footer Section -->
         <footer class="footer bg-gray-900">
           <div class="container">
             <div class="footer-content">
               <div class="footer-section">
                 <div class="footer-brand">
                   <a routerLink="/" class="footer-brand-link">
-                    <img class="nav-brand-logo" src="assets/images/filmLogo.png" alt="Fadeout">
-                    <span class="footer-brand-text">Fadeout</span>
+                    <img src="https://venture31.com/wp-content/uploads/2024/11/V31_icon_88px.png" alt="Venture31" class="footer-brand-logo">
+                    <span class="footer-brand-text">Venture31</span>
                   </a>
                 </div>
                 <p class="footer-description">
