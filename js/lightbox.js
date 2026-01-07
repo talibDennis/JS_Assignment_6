@@ -46,7 +46,7 @@
   // Open handlers
   triggers.forEach(t => t.addEventListener('click', openDialog));
   // Close handlers
-  closeBtn.addEventListener('click', closeDialog);
+closeBtn.addEventListener('click', closeDialog);
 
   // Click outside to close (only for native dialog)
   dialog.addEventListener('click', (e) => {
