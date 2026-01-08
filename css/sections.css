@@ -1,4 +1,4 @@
-movies
+
 /* ===== Global html ===== */
 section-header
 /* ============================
@@ -625,6 +625,7 @@ section-header
   height: 225px;
   width: 150px;
 }
+
 
 .media-card h3, .media-card h4, .media-card h5 {
   font-size: 1.1rem;

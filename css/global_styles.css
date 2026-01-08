@@ -89,6 +89,16 @@
   scroll-behavior: smooth;
 }
 
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
 html, body {
   font-family: var(--font-family);
   line-height: var(--line-height-body);
