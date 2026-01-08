@@ -634,10 +634,12 @@ section-header
 }
 
 .media-icon {
-  margin-bottom: var(--space-1);
+  position: relative;
+  margin-bottom: 6px;
 }
 
 .media-poster {
+  display: block;
   border-radius: var(--radius-lg);
   height: 225px;
   width: 150px;
@@ -654,6 +656,28 @@ section-header
 .media-card p {
   color: var(--gray-600);
   line-height: 1.6;
+}
+
+.mDetails {
+  text-align: left;
+  margin-top: 6;
+  padding-top: 15px;
+}
+
+.mDetails .movie-title {
+  /* font-size: 1rem; */
+  font-weight: 600;
+  color: #111827; /* dark gray */
+  margin: 4px 0;
+}
+
+.mDetails .movie-date {
+  font-size: 0.85rem;
+  color: #6b7280; /* muted gray */
+}
+
+.mDetails h2 {
+  font-size: 1rem;
 }
 
 /* ***** Search Card ***** */

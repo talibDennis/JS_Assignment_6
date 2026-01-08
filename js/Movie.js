@@ -17,7 +17,7 @@ class Movie {
       json.overview,
       json.release_date,
       json.poster_path,
-      json.average
+      json.vote_average
     );
   }
   

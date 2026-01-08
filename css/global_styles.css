@@ -166,11 +166,11 @@ html, body {
 .mCard {
   /* background: rgb(173, 173, 173); */
   border-radius: var(--radius-md);
-  /* box-shadow: var(--shadow-lg); */
+  /* box-shadow: var(--shadow-md); */
   margin-bottom: 10px;
   /* padding: var(--space-2); */
   transition: all 0.3s ease-in-out;
-  height: 385px;
+  height: 312px;
   width: 150px;
 }
 
