@@ -1,8 +1,7 @@
 
-let movies = []; // empty collection of movies
+let trends = []; // stores trending movie results
 let moviePanelOpen = false;
-
-// let panelCard = document.querySelector('.panel-card');
+let moviePanel = document.querySelector('.movie-panel');
 const MAX_TRENDS = 6;
 
 // sample api call for a movie search (searching for: ghost in the shell)
@@ -31,7 +30,6 @@ async function searchMovies() {
   // return movies;
 } // searchMovies()
 
-// pulls results from 'movies = [];' array
 function showPoster() {
   // *************Grid
   let searchGridDiv = document.querySelector('.search-grid');
@@ -120,99 +118,52 @@ function showPoster() {
   }
 } // showPosters()
 
-
 async function getMovieDetails(id) {
   const url = `${BASE_URL}movie/${id}?api_key=${API_KEY}&language=en-US`;
+  
   const response = await fetch(url);
-  if (!response.ok) {
+
+  if (!response.ok) { // if response code is 200 ok
     throw new Error(`HTTP error! status: ${response.status}`);
   }
+
   const data = await response.json();
-  const movie = Movie.fromJson(data); // single movie object
 
-  // Clear panel
-  let panelGrid = document.querySelector('.panel-grid');
-  panelGrid.innerHTML = '';
+  //  data.results is an array of raw movie JSON objects
+  const movie = Movie.fromJson(data);
 
-  // Close button
+  // display movie details
+  moviePanel.innerHTML = ''; // first clear the panel
+  moviePanel.setAttribute('style', `background: url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces${movie.backdropPath})`);
+
+  // make the controls and the x
   let controls = document.createElement('div');
   controls.setAttribute('id', 'controls');
+  // set controls
   let closeBtn = document.createElement('span');
   closeBtn.setAttribute('class', 'closeBtn');
   closeBtn.innerText = 'X';
   closeBtn.setAttribute('onclick', 'toggleMoviePanel();');
   controls.appendChild(closeBtn);
-  panelGrid.appendChild(controls);
-
-  // Panel Card
-  let panelCardDiv = document.createElement('div');
-  panelCardDiv.classList.add('panel-card', 'pCard');
-
-  // Poster
-  let panelPosterDiv = document.createElement('div');
-  let pPoster = document.createElement('img');
-  pPoster.classList.add('panel-poster');
-  pPoster.setAttribute('alt', movie.title);
-  pPoster.setAttribute('id', movie.id);
-  let posterUrl = movie.getPosterUrl();
-  if (!posterUrl) {
-    posterUrl = 'assets/images/noImage.png'; // fallback
-  }
-  pPoster.setAttribute('src', posterUrl);
-  panelPosterDiv.appendChild(pPoster);
-  panelCardDiv.appendChild(panelPosterDiv);
-
-  // Details
-  let pDetailsDiv = document.createElement('div');
-  pDetailsDiv.classList.add('pDetails');
-
-  // Title & Date
-  let pTitleDiv = document.createElement('div');
-  pTitleDiv.classList.add('pTitle');
-  let title = document.createElement('h2');
-  title.textContent = movie.title;
-  let date = document.createElement('span');
-  let pMovieDate = movie.releaseDate;
-  date.textContent = (!pMovieDate || pMovieDate.trim() === '') ? 'Release date not available' : pMovieDate;
-  pTitleDiv.appendChild(title);
-  pTitleDiv.appendChild(date);
-
-  // Overview
-  let pOverviewDiv = document.createElement('div');
-  pOverviewDiv.classList.add('sOverview');
-  let pOverview = document.createElement('p');
-  let pMovieOverview = movie.overview;
-  if (!pMovieOverview || pMovieOverview.trim() === '') {
-    pOverview.textContent = 'Overview not available';
-  } else {
-    let maxLength = 150;
-    if (pMovieOverview.length > maxLength) {
-      pMovieOverview = pMovieOverview.substring(0, maxLength) + '...';
-    }
-    pOverview.textContent = pMovieOverview;
-  }
-  pOverviewDiv.appendChild(pOverview);
-
-  // Append details
-  pDetailsDiv.appendChild(pTitleDiv);
-  pDetailsDiv.appendChild(pOverviewDiv);
-  panelCardDiv.appendChild(pDetailsDiv);
-
-  // Add to panel
-  panelGrid.appendChild(panelCardDiv);
-
+  moviePanel.appendChild(controls);
+  
+  // set movie details
+  let movieID = document.createElement('p');
+  movieID.innerText = movie.id;
+  
+  moviePanel.appendChild(movieID);
+  
   toggleMoviePanel();
 }
 
-
 function toggleMoviePanel() {
   if(!moviePanelOpen) { // it's closed so open the moviePane
-    $('.panel-grid').animate({
+    $('.movie-panel').animate({
       bottom: 0
     }, 320, 'swing');
   }
   else { // it's open now close the moviePane
-    $('.panel-grid').animate({
+    $('.movie-panel').animate({
       bottom: -550
     }, 260, 'swing');
   }

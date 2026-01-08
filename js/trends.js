@@ -1,124 +1,110 @@
 
-let movies = []; // empty collection of movies
+let trends = []; // stores trending movie results
 let moviePanelOpen = false;
 let moviePanel = document.querySelector('.movie-panel');
-const MAX_TRENDS = 6;
+const MAX_TRENDS = 7;
+
+
 
 // sample api call for a movie search (searching for: ghost in the shell)
-// https://api.themoviedb.org/3/search/movie?api_key=cb7c7779c5c4232012594c012cf9a701&query=ghost in the shell
-
+// https://api.themoviedb.org/3/trending/movie/day?api_key=YOUR_API_KEY
 // Code begins:
 const API_KEY = 'cb7c7779c5c4232012594c012cf9a701'
 const BASE_URL = 'https://api.themoviedb.org/3/';
 
-async function searchMovies() {
-  let query = document.querySelector('#txtSearch').value;
-  const url = `${BASE_URL}search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
+// Code begins:
+async function getTrendingMovies() {
+  const url = `${BASE_URL}trending/movie/week?api_key=${API_KEY}`;
   console.log(url);
-  const response = await fetch(url);
 
-  if (!response.ok) { // if response code is 200 ok
+  const response = await fetch(url);
+  if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
   const data = await response.json();
 
-  //  data.results is an array of raw movie JSON objects
-  movies = data.results.map(movieJson => Movie.fromJson(movieJson));
-  console.log(movies);
-  showPoster()
-  // return movies;
-} // searchMovies()
+  // Convert raw JSON to Movie instances
+  trends = data.results.map(movieJson => Movie.fromJson(movieJson));
+  console.log(trends);
 
-// pulls results from 'movies = [];' array
+  showPoster();
+}
+
+
+
+/* ============================
+========= TRENDS =========
+============================ */
+// pulls results from 'trends = [];' array
 function showPoster() {
-  // *************Grid
-  let searchGridDiv = document.querySelector('.search-grid');
-  searchGridDiv.innerHTML = ''; // clears the gallery first!
+  // ************* Grid *************
+  let mediaGridDiv = document.querySelector('.media-grid');
+  mediaGridDiv.innerHTML = ''; // clears the gallery first!
 
-  for(let i = 0; i < movies.length; i++) {
-    // *************Card
-    let sCardDiv = document.createElement('div');
-    sCardDiv.classList.add('search-card', 'sCard');
+  for(let i = 0; i < MAX_TRENDS; i++) {
+    // *********** Card *************
+    let mCardDiv = document.createElement('div');
+    mCardDiv.classList.add('media-card', 'mCard');
     
-    // *************Poster
+    // *********** Poster ***********
+    let mIconDiv = document.createElement('div');
     let posterDiv = document.createElement('div');
     let poster = document.createElement('img');
-    poster.classList.add('search-poster');
-    poster.setAttribute('alt', movies[i].title);
-    poster.setAttribute('id', movies[i].id);
-    poster.setAttribute('onclick', 'getMovieDetails(this.id);');
-    
-    let posterUrl = movies[i].getPosterUrl();
+    mIconDiv.classList.add('media-icon');
+    poster.classList.add('media-poster');
+    let posterUrl = trends[i].getPosterUrl();
+    poster.setAttribute('alt', trends[i].title);
+    poster.setAttribute('id', trends[i].id);
+    poster.setAttribute('onclick', 'getTrendingMovies(this.id);');
+    // if no poster
     if (!posterUrl) {
       posterUrl = 'assets/images/noImage.png'; // ✅ your default image path
     }
     poster.setAttribute('src', posterUrl);
-
-    // Append image to poster
+    // build div
     posterDiv.appendChild(poster);
+    mIconDiv.appendChild(posterDiv);
     
-    // *************Details
-    let sDetailsDiv = document.createElement('div');
-    sDetailsDiv.classList.add('sDetails');
+    // *********** Details ***********
+    let mDetailsDiv = document.createElement('div');
+    mDetailsDiv.classList.add('mDetails');
 
-    // >>>>create details-div-heading
-    let sTitleDiv = document.createElement('div');
-    sTitleDiv.classList.add('sTitle');
-    // create title
+    // >>>>create details-div-header
+    let mTitleDiv = document.createElement('div');
+    mTitleDiv.classList.add('sTitle');
+    // title
     let title = document.createElement('h2');
-    title.textContent = movies[i].title;
-    // create date
+    title.textContent = trends[i].title;
+    // date
     let date = document.createElement('span');
-    let sMovieDate = movies[i].releaseDate;
-
-    // Check if release date is empty or null
-    if (!sMovieDate || sMovieDate.trim() === '') {
+    let mMovieDate = trends[i].releaseDate;
+    // if no date
+    if (!mMovieDate || mMovieDate.trim() === '') {
       date.textContent = 'Release date not available';
     } else {
-      date.textContent = sMovieDate; // Or format it if needed
+      date.textContent = mMovieDate; // Or format it if needed
     }
-
-    // Append both to heading
-    sTitleDiv.appendChild(title);
-    sTitleDiv.appendChild(date);
-    
-    // >>>>create details-div-body
-    let sOverviewDiv = document.createElement('div');
-    sOverviewDiv.classList.add('sOverview');
-    
-    let sOverview = document.createElement('p');
-    let sMovieOverview = movies[i].overview;
-
-    // Check if overview is empty or null
-    if (!sMovieOverview || sMovieOverview.trim() === '') {
-      sOverview.textContent = 'Overview not available';
-    } else {
-      // Truncate if too long
-      let maxLength = 150; // Approx. 2 lines
-      if (sMovieOverview.length > maxLength) {
-        sMovieOverview = sMovieOverview.substring(0, maxLength) + '...';
-      }
-      sOverview.textContent = sMovieOverview;
-    }
-
-    sOverviewDiv.appendChild(sOverview);
-
-
+    // Append both to header
+    mTitleDiv.append(title, date);
     // Append header & body to details
-    sDetailsDiv.appendChild(sTitleDiv);
-    sDetailsDiv.appendChild(sOverviewDiv);
+    mDetailsDiv.appendChild(mTitleDiv);
     
-    // *************Append poster & details to Card
-    sCardDiv.appendChild(posterDiv);
-    sCardDiv.appendChild(sDetailsDiv);
+    // *** Append poster & details to Card *************
+    mCardDiv.appendChild(mIconDiv);
+    mCardDiv.appendChild(mDetailsDiv);
 
-    // *************Append Card to Grid
-    searchGridDiv.appendChild(sCardDiv);
+    // *** Append Card to Grid *************
+    mediaGridDiv.appendChild(mCardDiv);
 
   }
 } // showPosters()
 
+
+
+/* ============================
+========= LIGHTBOX =========
+============================ */
 async function getMovieDetails(id) {
   const url = `${BASE_URL}movie/${id}?api_key=${API_KEY}&language=en-US`;
   
@@ -213,7 +199,7 @@ function closeNav() {
 
 /*
 // demo
-searchMovies('ghost in the shell')
+mediaMovies('ghost in the shell')
   .then(movies => {
     console.log('Movies as class instances:', movies);
     // e.g. use a method:
