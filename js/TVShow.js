@@ -1,30 +1,28 @@
 
-class Movie {
-  constructor(id, backdropPath, title, overview, releaseDate, posterPath, voteAverage) {
+class TVShow {
+  constructor(id, name, overview, firstAirDate, posterPath, voteAverage) {
     this.id = id;
-    this.backdropPath = backdropPath;
-    this.title = title;
+    this.name = name; // TV show title
     this.overview = overview;
-    this.releaseDate = releaseDate;
+    this.firstAirDate = firstAirDate;
     this.posterPath = posterPath;
     this.voteAverage = voteAverage;
   }
 
   static fromJson(json) {
-    return new Movie(
+    return new TVShow(
       json.id,
-      json.backdrop_path,
-      json.title,
+      json.name, // TMDb uses "name" for TV shows
       json.overview,
-      json.release_date,
+      json.first_air_date,
       json.poster_path,
       json.vote_average
     );
   }
-  
+
   getPosterUrl(size = 'w342') {
     if (!this.posterPath) {
-      return null;
+      return 'assets/images/noImage.png'; // ✅ fallback image
     }
     return `https://image.tmdb.org/t/p/${size}${this.posterPath}`;
   }

@@ -1,20 +1,18 @@
 
-let trends = []; // stores trending movie results
+let movieTrends = []; // stores trending movie results
+let tvTrends = []; // stores trending movie results
 let moviePanelOpen = false;
 let moviePanel = document.querySelector('.movie-panel');
 const MAX_TRENDS = 7;
 
-
-
 // sample api call for a movie search (searching for: ghost in the shell)
-// https://api.themoviedb.org/3/trending/movie/day?api_key=YOUR_API_KEY
-// Code begins:
+// https://api.themoviedb.org/3/trending/movie/week?api_key=YOUR_API_KEY
 const API_KEY = 'cb7c7779c5c4232012594c012cf9a701'
 const BASE_URL = 'https://api.themoviedb.org/3/';
 
 // Code begins:
 async function getTrendingMovies() {
-  const url = `${BASE_URL}trending/movie/day?api_key=${API_KEY}`;
+  const url = `${BASE_URL}trending/movie/week?api_key=${API_KEY}`;
   console.log(url);
 
   const response = await fetch(url);
@@ -25,19 +23,19 @@ async function getTrendingMovies() {
   const data = await response.json();
 
   // Convert raw JSON to Movie instances
-  trends = data.results.map(movieJson => Movie.fromJson(movieJson));
-  console.log(trends);
+  movieTrends = data.results.map(movieJson => Movie.fromJson(movieJson));
+  console.log(movieTrends);
 
-  showPoster();
+  showTrendingMovies();
 }
 
 
 
 /* ============================
-========= TRENDS =========
+========= MOVIE TRENDS =========
 ============================ */
-// pulls results from 'trends = [];' array
-function showPoster() {
+// pulls results from 'movieTrends = [];' array
+function showTrendingMovies() {
   // ************* Grid *************
   let mediaGridDiv = document.querySelector('.media-grid');
   mediaGridDiv.innerHTML = ''; // clears the gallery first!
@@ -50,12 +48,13 @@ function showPoster() {
     // *********** Poster ***********
     let mIconDiv = document.createElement('div');
     mIconDiv.classList.add('media-icon');
+    
     let posterDiv = document.createElement('div');
     let poster = document.createElement('img');
     poster.classList.add('media-poster');
-    let posterUrl = trends[i].getPosterUrl();
-    poster.setAttribute('alt', trends[i].title);
-    poster.setAttribute('id', trends[i].id);
+    let posterUrl = movieTrends[i].getPosterUrl();
+    poster.setAttribute('alt', movieTrends[i].title);
+    poster.setAttribute('id', movieTrends[i].id);
     poster.setAttribute('onclick', 'getTrendingMovies(this.id);');
     // if no poster
     if (!posterUrl) {
@@ -69,9 +68,10 @@ function showPoster() {
     let mScoreBadge = document.createElement('div');
     let score = document.createElement('span');
     score.classList.add('score-badge__value');
-    let mScore = trends[i].voteAverage;
+    let mScore = movieTrends[i].voteAverage;
     let percentage = (mScore * 10).toFixed(0) + '%'; // Convert to percentage
     score.textContent = percentage;
+    // score.textContent = show.getScorePercentage();
     // Apply color class based on score
     if (mScore >= 7) {
       mScoreBadge.classList.add('score-badge', 'score-high'); // Green
@@ -83,7 +83,6 @@ function showPoster() {
     mScoreBadge.appendChild(score);
     mScoreActions.appendChild(mScoreBadge);
 
-    // build movie info div
     mIconDiv.append(posterDiv, mScoreActions);
     
     // *********** Details ***********
@@ -95,10 +94,10 @@ function showPoster() {
     mTitleDiv.classList.add('mTitle');
     // title
     let title = document.createElement('h2');
-    title.textContent = trends[i].title;
+    title.textContent = movieTrends[i].title;
     // date
     let date = document.createElement('span');
-    let mMovieDate = trends[i].releaseDate;
+    let mMovieDate = movieTrends[i].releaseDate;
     // if no date
     if (!mMovieDate || mMovieDate.trim() === '') {
       date.textContent = 'Release date not available';
@@ -117,7 +116,7 @@ function showPoster() {
     mediaGridDiv.appendChild(mCardDiv);
 
   }
-} // showPosters()
+} // showTrendingMovies()
 
 
 

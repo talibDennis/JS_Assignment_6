@@ -36,6 +36,8 @@
   background: radial-gradient(circle at 30% 30%, #1e293b 0%, #0b1220 60%);
   display: grid;
   place-items: center;
+  text-align: center;
+  color: var(--text);
 }
 
 .score-badge__value { font-size: 13px; font-weight: 800; line-height: 1; }
