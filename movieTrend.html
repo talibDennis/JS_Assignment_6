@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="css/lightbox.css">
     <link rel="stylesheet" href="css/badge.css">
     <script src="js/jquery.js" async defer></script>
-    <script src="js/TVShow.js" async defer></script>
-    <!-- <script src="js/tvTrends.js" async defer></script> -->
+    <script src="js/Movie.js" async defer></script>
+    <!-- <script src="js/movieTrends.js" async defer></script> -->
     <title>Fadeout</title>
   </head>
 
@@ -92,7 +92,7 @@
           <section class="movies" id="movies">
             <div class="container">
               <div class="section-header">
-                <h2>Top 100 Trending Movies of the Weeks</h2>
+                <h2 class="movieHead">Top 100 Trending Movies of the Weeks</h2>
                 <button type=" button" onclick="getTrendingMovies();">Show Movie</button>
               </div>
               <!-- first row -->
@@ -196,7 +196,7 @@
           <section class="tv" id="tv">
             <div class="container">
               <div class="section-header">
-                <h2 class="tvHead">Top 200 Trending TV Shows of the Week</h2>
+                <h2>Top 200 Trending TV Shows of the Week</h2>
                 <button type=" button" onclick="getTrendingTVShows();">Show TV</button>
               </div>
               <!-- first row -->
@@ -396,5 +396,5 @@
       </div>
     </app-root>
   </body>
-  <script src="js/tvTrends.js" async defer></script>
+  <script src="js/movieTrends.js" async defer></script>
 </html>

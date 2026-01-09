@@ -1,4 +1,4 @@
-
+movies
 /* ===== Global html ===== */
 section-header
 /* ============================
@@ -390,7 +390,7 @@ section-header
 }
 
 .tv {
-  background-color: var(--gray-50);
+  background-color: var(--gray-100);
 }
 
 .section-header {
@@ -604,7 +604,13 @@ section-header
 }
 
 /* ***** Media Card ***** */
-.media-grid {
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-1);
+}
+
+.tv-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: var(--space-1);

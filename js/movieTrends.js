@@ -1,17 +1,17 @@
 
-let trendingTV = []; // Array to store trending TV shows
+let movieTrends = []; // stores trending movie results
 let moviePanelOpen = false;
 let moviePanel = document.querySelector('.movie-panel');
 const MAX_TRENDS = 7;
 
 // sample api call for a movie search (searching for: ghost in the shell)
-// https://api.themoviedb.org/3/trending/tv/week?api_key=YOUR_API_KEY
+// https://api.themoviedb.org/3/trending/movie/week?api_key=YOUR_API_KEY
 const API_KEY = 'cb7c7779c5c4232012594c012cf9a701'
 const BASE_URL = 'https://api.themoviedb.org/3/';
 
 // Code begins:
-async function getTrendingTVShows() {
-  const url = `${BASE_URL}trending/tv/week?api_key=${API_KEY}`;
+async function getTrendingMovies() {
+  const url = `${BASE_URL}trending/movie/week?api_key=${API_KEY}`;
   console.log(url);
 
   const response = await fetch(url);
@@ -22,28 +22,28 @@ async function getTrendingTVShows() {
   const data = await response.json();
 
   // Convert raw JSON to Movie instances
-  trendingTV = (data.results || []).map(TVShow.fromJson);
-  console.log(trendingTV);
+  movieTrends = (data.results || []).map(Movie.fromJson);
+  console.log(movieTrends);
 
-  showTrendingTV();
+  showTrendingMovies();
 }
 
 
 
 /* ============================
-========= TV TRENDS =========
+========= MOVIE TRENDS =========
 ============================ */
-// pulls results from 'trendingTV = [];' array
-function showTrendingTV(tvShows = trendingTV) {
-  // ************* TV SECTION HEAD *************
-  const movieDiv = document.querySelector('.tvHead');
-  movieDiv.innerHTML = `Top ${MAX_TRENDS} Trending TV Shows of the Week`;
+// pulls results from 'movieTrends = [];' array
+function showTrendingMovies(movies = movieTrends) {
+  // ************* MOVIE SECTION HEAD *************
+  const movieDiv = document.querySelector('.movieHead');
+  movieDiv.textContent = `Top ${MAX_TRENDS} Trending Movies of the Week`;
 
   // ************* Grid *************
-  const mediaGridDiv = document.querySelector('.tv-grid');
+  const mediaGridDiv = document.querySelector('.movie-grid');
   mediaGridDiv.innerHTML = ''; // clears the gallery first!
 
-  tvShows.forEach(show => {
+  movies.forEach(show => {
     // *********** Card *************
     const mCardDiv = document.createElement('div');
     mCardDiv.classList.add('media-card', 'mCard');
@@ -57,9 +57,9 @@ function showTrendingTV(tvShows = trendingTV) {
     poster.classList.add('media-poster');
     const posterUrl = show.getPosterUrl();
     poster.src = posterUrl;
-    poster.alt = show.name || 'Untitled';
+    poster.alt = show.title || 'Untitled';
     poster.id = show.id;
-    poster.addEventListener('click', () => getTvDetails(show.id));
+    poster.addEventListener('click', () => getMovieDetails(show.id));
 
     // *********** Score ***********
     const mScoreActions = document.createElement('div');
@@ -76,7 +76,7 @@ function showTrendingTV(tvShows = trendingTV) {
 
     score.textContent = mScore;
     // Apply color class based on score
-    const nScore = parseFloat(show.voteAverage) || 0;
+    const nScore = Number(show.voteAverage) || 0;
     console.log(nScore);
 
     // Apply color class based on score
@@ -96,12 +96,12 @@ function showTrendingTV(tvShows = trendingTV) {
     mTitleDiv.classList.add('mTitle');
 
     const title = document.createElement('h3');
-    title.textContent = show.name || 'Untitled';
+    title.textContent = show.title || 'Untitled';
 
     const date = document.createElement('span');
-    date.textContent = show.firstAirDate || 'Date not available';
+    date.textContent = show.releaseDate || 'Date not available';
 
-    // >>>> build divs <<<<<
+    // >>>> build DOM <<<<<
     mScoreBadge.appendChild(score);
     mScoreActions.appendChild(mScoreBadge);
     posterDiv.appendChild(poster);
@@ -117,5 +117,5 @@ function showTrendingTV(tvShows = trendingTV) {
 
 // Auto‑load movies + TV when the page finishes loading
 window.addEventListener("DOMContentLoaded", () => {
-    getTrendingTVShows();
+    getTrendingMovies();
 });

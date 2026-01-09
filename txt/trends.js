@@ -27,7 +27,7 @@ async function getTrendingMovies() {
     const data = await fetchJson(url);
 
     movieTrends = data.results.map(m => Movie.fromJson(m));
-    renderMediaGrid(movieTrends, buildMovieCard, ".movie-grid");
+    renderMediaGrid(movieTrends, buildMovieCard);
 }
 
 // TV Shows
@@ -36,7 +36,7 @@ async function getTrendingTVShows() {
     const data = await fetchJson(url);
 
     trendingTV = data.results.map(tv => TVShow.fromJson(tv));
-    renderMediaGrid(trendingTV, buildTVCard, ".tv-grid");
+    renderMediaGrid(trendingTV, buildTVCard);
 }
 
 
@@ -44,31 +44,14 @@ async function getTrendingTVShows() {
 // ========================================================
 // == SHARED GRID RENDERER (Movies + TV share this!) ======
 // ========================================================
-function renderMediaGrid(items, cardBuilder, selector) {
-  const grid = document.querySelector(selector);
-  if (!grid) {
-    console.error(`[renderMediaGrid] Grid not found: ${selector}`);
-    return;
-  }
+function renderMediaGrid(items, cardBuilder) {
+    const grid = document.querySelector(".media-grid");
+    grid.innerHTML = ""; // clear
 
-  // Clear old content safely
-  grid.innerHTML = "";
-
-  // Handle empty/undefined items
-  if (!Array.isArray(items) || items.length === 0) {
-    console.warn(`[renderMediaGrid] No items to render for ${selector}`);
-    return;
-  }
-
-  const count = Math.min(items.length, MAX_TRENDS);
-  for (let i = 0; i < count; i++) {
-    try {
-      const card = cardBuilder(items[i]);
-      grid.appendChild(card);
-    } catch (err) {
-      console.error(`[renderMediaGrid] Failed to build card ${i}:`, err);
-    }
-  }
+    items.slice(0, MAX_TRENDS).forEach(item => {
+        const card = cardBuilder(item);
+        grid.appendChild(card);
+    });
 }
 
 

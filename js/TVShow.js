@@ -22,7 +22,7 @@ class TVShow {
 
   getPosterUrl(size = 'w342') {
     if (!this.posterPath) {
-      return 'assets/images/noImage.png'; // ✅ fallback image
+      return 'assets/images/noImage.png'; // fallback image
     }
     return `https://image.tmdb.org/t/p/${size}${this.posterPath}`;
   }

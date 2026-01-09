@@ -27,6 +27,7 @@ async function searchMovies() {
   //  data.results is an array of raw movie JSON objects
   movies = data.results.map(movieJson => Movie.fromJson(movieJson));
   console.log(movies);
+  
   showPoster()
   // return movies;
 } // searchMovies()

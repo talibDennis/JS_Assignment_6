@@ -196,8 +196,8 @@ html, body {
 }
 
 .mCard:hover, .sCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-12px);
+  /* box-shadow: var(--shadow-xl); */
 }
 
 .text-center {

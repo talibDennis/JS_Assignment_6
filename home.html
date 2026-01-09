@@ -11,89 +11,90 @@
     <link rel="stylesheet" href="css/lightbox.css">
     <link rel="stylesheet" href="css/badge.css">
     <script src="js/jquery.js" async defer></script>
+    <script src="js/Movie.js" async defer></script>
     <script src="js/TVShow.js" async defer></script>
-    <!-- <script src="js/tvTrends.js" async defer></script> -->
+    <script src="js/trends_hardened.js" async defer></script>
     <title>Fadeout</title>
   </head>
 
   <body>
-    <div class="app">
-      <!-- Header Section -->
-      <app-header>
-        <header class="header" [class.hidden]="isHeaderHidden">
-          <nav class="nav">
-            <div class="container">
-              <div class="nav-content">
-                <div class="nav-brand">
-                  <a routerLink="/" class="nav-brand-link" (click)="closeMobileMenu()">
-                    <img class="nav-brand-logo" src="assets/images/filmLogo.png" alt="Fadeout">
-                    <span class="nav-brand-text"></span>
-                  </a>
+    <app-root>
+      <div class="app">
+        <!-- Header Section -->
+        <app-header>
+          <header class="header" [class.hidden]="isHeaderHidden">
+            <nav class="nav">
+              <div class="container">
+                <div class="nav-content">
+                  <div class="nav-brand">
+                    <a routerLink="/" class="nav-brand-link" (click)="closeMobileMenu()">
+                      <img class="nav-brand-logo" src="assets/images/filmLogo.png" alt="Fadeout">
+                      <span class="nav-brand-text"></span>
+                    </a>
+                  </div>
+                  
+                  <div class="nav-links">
+                    <a href="#movies">Movies</a>
+                    <a href="#tv">TV Shows</a>
+                    <a href="watchlist.html">Watchlist</a>
+                    <a href="search.html">Search</a>
+                  </div>
+                  
+                  <div class="nav-actions">
+                    <a class="cart-link" title="Nav Actions">
+                      <div class="cart-icon">
+                        <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon" onclick="toggleMoviePanel();">
+                        <img class="nav-action-icons" src="assets/images/moreIconWhite.svg" alt="moreIcon">
+                        <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon">
+                        <img class="nav-action-icons" src="assets/images/searchIconBlue.svg" alt="searchIcon">
+                      </div>
+                    </a>
+                  </div>
+                  
+                  <button class="mobile-menu-btn" onclick='toggleMenu();'>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                  </button>
                 </div>
-                
-                <div class="nav-links">
-                  <a href="#movies">Movies</a>
-                  <a href="#tv">TV Shows</a>
-                  <a href="watchlist.html">Watchlist</a>
-                  <a href="search.html">Search</a>
+              </div>
+            </nav>
+            
+            <div class="mobile-menu" [class.open]="mobileMenuOpen">
+              <div class="mobile-menu-content">
+                <a href="#movies">Movies</a>
+                <a href="#tv">TV Shows</a>
+                <a href="watchlist.html">Watchlist</a>
+                <a href="search.html">Search</a>
+                <div class="mobile-menu-divider"></div>
+                <div class="mobile-auth-buttons">
+                  <a routerLink="/login" (click)="closeMobileMenu()" class="nav-action-link mobile-btn">Login</a>
+                  <a routerLink="/register" (click)="closeMobileMenu()" class="nav-action-primary-link mobile-btn">Sign Up</a>
                 </div>
-                
-                <div class="nav-actions">
-                  <a class="cart-link" title="Nav Actions">
-                    <div class="cart-icon">
-                      <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon" onclick="toggleMoviePanel();">
-                      <img class="nav-action-icons" src="assets/images/moreIconWhite.svg" alt="moreIcon">
-                      <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon">
-                      <img class="nav-action-icons" src="assets/images/searchIconBlue.svg" alt="searchIcon">
-                    </div>
-                  </a>
-                </div>
-                
-                <button class="mobile-menu-btn" onclick='toggleMenu();'>
-                  <span class="hamburger-line"></span>
-                  <span class="hamburger-line"></span>
-                  <span class="hamburger-line"></span>
-                </button>
               </div>
             </div>
-          </nav>
-          
-          <div class="mobile-menu" [class.open]="mobileMenuOpen">
-            <div class="mobile-menu-content">
-              <a href="#movies">Movies</a>
-              <a href="#tv">TV Shows</a>
-              <a href="watchlist.html">Watchlist</a>
-              <a href="search.html">Search</a>
-              <div class="mobile-menu-divider"></div>
-              <div class="mobile-auth-buttons">
-                <a routerLink="/login" (click)="closeMobileMenu()" class="nav-action-link mobile-btn">Login</a>
-                <a routerLink="/register" (click)="closeMobileMenu()" class="nav-action-primary-link mobile-btn">Sign Up</a>
-              </div>
-            </div>
-          </div>
-        </header>
-      </app-header>
+          </header>
+        </app-header>
 
-      <!-- HERO SECTION -->
-      <main class="main-content">
-        <section class="hero">
-          <div class="container">
-            <div class="hero-content">
-              <div class="hero-text">
-                <h1 class="hero-title">
-                  Fadeout
-                </h1>
+        <!-- HERO SECTION -->
+        <main class="main-content">
+          <section class="hero">
+            <div class="container">
+              <div class="hero-content">
+                <div class="hero-text">
+                  <h1 class="hero-title">
+                    Fadeout
+                  </h1>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-        
+          </section>
+          
           <!-- MOVIE SECTION -->
           <section class="movies" id="movies">
             <div class="container">
               <div class="section-header">
-                <h2>Top 100 Trending Movies of the Weeks</h2>
-                <button type=" button" onclick="getTrendingMovies();">Show Movie</button>
+                <h2>Top 6 Trending Movies of the Weeks</h2>
               </div>
               <!-- first row -->
               <div class="movie-grid">
@@ -196,7 +197,7 @@
           <section class="tv" id="tv">
             <div class="container">
               <div class="section-header">
-                <h2 class="tvHead">Top 200 Trending TV Shows of the Week</h2>
+                <h2>Top 6 Trending TV Shows of the Week</h2>
                 <button type=" button" onclick="getTrendingTVShows();">Show TV</button>
               </div>
               <!-- first row -->
@@ -396,5 +397,5 @@
       </div>
     </app-root>
   </body>
-  <script src="js/tvTrends.js" async defer></script>
+  <!-- <script src="trends.js"></script> -->
 </html>
