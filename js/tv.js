@@ -1,10 +1,10 @@
 
 
 export async function loadTV({ apiKey, baseUrl, max = 20 }) {
-  const res = await fetch(`${baseUrl}trending/tv/week?api_key=${apiKey}`); // from your file
+  const res = await fetch(`${baseUrl}trending/tv/week?api_key=${apiKey}`);
   if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
   const data = await res.json();
-  const items = (data.results ?? []).map(TVShow.fromJson); // relies on your class
+  const items = (data.results ?? []).map(TVShow.fromJson);
   renderTV(items, max);
 }
 
@@ -13,7 +13,7 @@ function renderTV(tvShows, max) {
   const grid = document.querySelector('.tv-grid');
   if (!head || !grid) return;
 
-  head.textContent = `Top ${max} Trending Movies of the Week`;
+  head.textContent = `Top ${max} Trending TV Shows of the Week`;
   grid.innerHTML = '';
   
   tvShows.forEach(show => {
@@ -49,7 +49,7 @@ function renderTV(tvShows, max) {
 
     score.textContent = mScore;
     // Apply color class based on score
-    const nScore = parseFloat(show.voteAverage) || 0;
+    const nScore = Number(show.voteAverage) || 0;
     console.log(nScore);
 
     // Apply color class based on score

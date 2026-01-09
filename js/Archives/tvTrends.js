@@ -1,22 +1,49 @@
 
+let trendingTV = []; // Array to store trending TV shows
+let moviePanelOpen = false;
+let moviePanel = document.querySelector('.movie-panel');
+const MAX_TRENDS = 7;
 
-export async function loadMovies({ apiKey, baseUrl, max = 20 }) {
-  const res = await fetch(`${baseUrl}trending/movie/week?api_key=${apiKey}`);
-  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-  const data = await res.json();
-  const items = (data.results ?? []).map(Movie.fromJson);
-  renderMovies(items, max);
+// sample api call for a movie search (searching for: ghost in the shell)
+// https://api.themoviedb.org/3/trending/tv/week?api_key=YOUR_API_KEY
+const API_KEY = 'cb7c7779c5c4232012594c012cf9a701'
+const BASE_URL = 'https://api.themoviedb.org/3/';
+
+// Code begins:
+async function getTrendingTVShows() {
+  const url = `${BASE_URL}trending/tv/week?api_key=${API_KEY}`;
+  console.log(url);
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // Convert raw JSON to Movie instances
+  trendingTV = (data.results || []).map(TVShow.fromJson);
+  console.log(trendingTV);
+
+  showTrendingTV();
 }
 
-function renderMovies(movies, max) {
-  const head = document.querySelector('.movieHead');
-  const grid = document.querySelector('.movie-grid');
-  if (!head || !grid) return;
 
-  head.textContent = `Top ${max} Trending Movies of the Week`;
-  grid.innerHTML = '';
 
-  movies.forEach(show => {
+/* ============================
+========= TV TRENDS =========
+============================ */
+// pulls results from 'trendingTV = [];' array
+function showTrendingTV(tvShows = trendingTV) {
+  // ************* TV SECTION HEAD *************
+  const movieDiv = document.querySelector('.tvHead');
+  movieDiv.innerHTML = `Top ${MAX_TRENDS} Trending TV Shows of the Week`;
+
+  // ************* Grid *************
+  const mediaGridDiv = document.querySelector('.tv-grid');
+  mediaGridDiv.innerHTML = ''; // clears the gallery first!
+
+  tvShows.forEach(show => {
     // *********** Card *************
     const mCardDiv = document.createElement('div');
     mCardDiv.classList.add('media-card', 'mCard');
@@ -30,9 +57,9 @@ function renderMovies(movies, max) {
     poster.classList.add('media-poster');
     const posterUrl = show.getPosterUrl();
     poster.src = posterUrl;
-    poster.alt = show.title || 'Untitled';
+    poster.alt = show.name || 'Untitled';
     poster.id = show.id;
-    poster.addEventListener('click', () => getMovieDetails?.(show.id));
+    poster.addEventListener('click', () => getTvDetails(show.id));
 
     // *********** Score ***********
     const mScoreActions = document.createElement('div');
@@ -49,7 +76,7 @@ function renderMovies(movies, max) {
 
     score.textContent = mScore;
     // Apply color class based on score
-    const nScore = Number(show.voteAverage) || 0;
+    const nScore = parseFloat(show.voteAverage) || 0;
     console.log(nScore);
 
     // Apply color class based on score
@@ -69,12 +96,12 @@ function renderMovies(movies, max) {
     mTitleDiv.classList.add('mTitle');
 
     const title = document.createElement('h3');
-    title.textContent = show.title || 'Untitled';
+    title.textContent = show.name || 'Untitled';
 
     const date = document.createElement('span');
-    date.textContent = show.releaseDate || 'Date not available';
+    date.textContent = show.firstAirDate || 'Date not available';
 
-    // >>>> build DOM <<<<<
+    // >>>> build divs <<<<<
     mScoreBadge.appendChild(score);
     mScoreActions.appendChild(mScoreBadge);
     posterDiv.appendChild(poster);
@@ -84,6 +111,11 @@ function renderMovies(movies, max) {
     mDetailsDiv.append(mTitleDiv);
 
     mCardDiv.append(mIconDiv, mDetailsDiv);
-    grid.appendChild(mCardDiv);
+    mediaGridDiv.appendChild(mCardDiv);
   });
 }
+
+// Auto‑load movies + TV when the page finishes loading
+window.addEventListener("DOMContentLoaded", () => {
+    getTrendingTVShows();
+});

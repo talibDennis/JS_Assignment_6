@@ -1,20 +1,47 @@
 
+let movieTrends = []; // stores trending movie results
+let moviePanelOpen = false;
+let moviePanel = document.querySelector('.movie-panel');
+const MAX_TRENDS = 7;
 
-export async function loadMovies({ apiKey, baseUrl, max = 20 }) {
-  const res = await fetch(`${baseUrl}trending/movie/week?api_key=${apiKey}`);
-  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-  const data = await res.json();
-  const items = (data.results ?? []).map(Movie.fromJson);
-  renderMovies(items, max);
+// sample api call for a movie search (searching for: ghost in the shell)
+// https://api.themoviedb.org/3/trending/movie/week?api_key=YOUR_API_KEY
+const API_KEY = 'cb7c7779c5c4232012594c012cf9a701'
+const BASE_URL = 'https://api.themoviedb.org/3/';
+
+// Code begins:
+async function getTrendingMovies() {
+  const url = `${BASE_URL}trending/movie/week?api_key=${API_KEY}`;
+  console.log(url);
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // Convert raw JSON to Movie instances
+  movieTrends = (data.results || []).map(Movie.fromJson);
+  console.log(movieTrends);
+
+  showTrendingMovies();
 }
 
-function renderMovies(movies, max) {
-  const head = document.querySelector('.movieHead');
-  const grid = document.querySelector('.movie-grid');
-  if (!head || !grid) return;
 
-  head.textContent = `Top ${max} Trending Movies of the Week`;
-  grid.innerHTML = '';
+
+/* ============================
+========= MOVIE TRENDS =========
+============================ */
+// pulls results from 'movieTrends = [];' array
+function showTrendingMovies(movies = movieTrends) {
+  // ************* MOVIE SECTION HEAD *************
+  const movieDiv = document.querySelector('.movieHead');
+  movieDiv.textContent = `Top ${MAX_TRENDS} Trending Movies of the Week`;
+
+  // ************* Grid *************
+  const mediaGridDiv = document.querySelector('.movie-grid');
+  mediaGridDiv.innerHTML = ''; // clears the gallery first!
 
   movies.forEach(show => {
     // *********** Card *************
@@ -32,7 +59,7 @@ function renderMovies(movies, max) {
     poster.src = posterUrl;
     poster.alt = show.title || 'Untitled';
     poster.id = show.id;
-    poster.addEventListener('click', () => getMovieDetails?.(show.id));
+    poster.addEventListener('click', () => getMovieDetails(show.id));
 
     // *********** Score ***********
     const mScoreActions = document.createElement('div');
@@ -84,6 +111,11 @@ function renderMovies(movies, max) {
     mDetailsDiv.append(mTitleDiv);
 
     mCardDiv.append(mIconDiv, mDetailsDiv);
-    grid.appendChild(mCardDiv);
+    mediaGridDiv.appendChild(mCardDiv);
   });
 }
+
+// Auto‑load movies + TV when the page finishes loading
+window.addEventListener("DOMContentLoaded", () => {
+    getTrendingMovies();
+});
