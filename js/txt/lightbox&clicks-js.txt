@@ -1,0 +1,106 @@
+/* ============================
+========= LIGHTBOX =========
+============================ */
+async function getMovieDetails(id) {
+  const url = `${BASE_URL}movie/${id}?api_key=${API_KEY}&language=en-US`;
+  
+  const response = await fetch(url);
+
+  if (!response.ok) { // if response code is 200 ok
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  //  data.results is an array of raw movie JSON objects
+  const movie = Movie.fromJson(data);
+
+  // display movie details
+  moviePanel.innerHTML = ''; // first clear the panel
+  // moviePanel.setAttribute('style', `background: url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces${movie.backdropPath})`);
+
+  // make the controls and the x
+  let controls = document.createElement('div');
+  controls.setAttribute('id', 'controls');
+  // set controls
+  let closeBtn = document.createElement('span');
+  closeBtn.setAttribute('class', 'closeBtn');
+  closeBtn.innerText = 'X';
+  closeBtn.setAttribute('onclick', 'toggleMoviePanel();');
+  controls.appendChild(closeBtn);
+  moviePanel.appendChild(controls);
+  
+  // set movie details
+  let movieID = document.createElement('p');
+  movieID.innerText = movie.id;
+  
+  moviePanel.appendChild(movieID);
+  
+  toggleMoviePanel();
+}
+
+function toggleMoviePanel() {
+  if(!moviePanelOpen) { // it's closed so open the moviePane
+    $('.movie-panel').animate({
+      bottom: 0
+    }, 320, 'swing');
+  }
+  else { // it's open now close the moviePane
+    $('.movie-panel').animate({
+      bottom: -550
+    }, 260, 'swing');
+  }
+  moviePanelOpen = !moviePanelOpen;
+} // toggleMoviePanel()
+
+//==================>>
+//== MENU CODE ==>>
+let menuOpen = false;
+
+function toggleMenu() {
+  if(!menuOpen) { // it's closed so open the menu
+    $('nav').animate({
+      right: 0
+    }, 320, 'swing');
+  }
+  else { // it's open now close the menu
+    $('nav').animate({
+      right: -226
+    }, 260, 'swing');
+  }
+  menuOpen = !menuOpen; // very common short-cut
+} // toggleMenu()
+
+function showBox(num) {
+  // first make the lightbox visible
+  $('#lightbox').css('visibility', 'visible');
+
+  // set the image src for the big picture
+  $('#lightboxImage').attr('src', 'assets/images/pic' + num + '.png');
+} // showBox()
+
+function hideBox() {
+  // hide the lightbox
+  $('#lightbox').css('visibility', 'hidden');
+} // hideBox()
+
+function closeNav() {
+  $('nav').animate({
+      right: -226
+    }, 220, 'swing');
+    menuOpen = false;
+} // closeNav()
+
+
+
+/*
+// demo
+mediaMovies('ghost in the shell')
+  .then(movies => {
+    console.log('Movies as class instances:', movies);
+    // e.g. use a method:
+    movies.forEach(movie => {
+      console.log(movie.title, movie.getPosterUrl());
+    });
+  })
+*/

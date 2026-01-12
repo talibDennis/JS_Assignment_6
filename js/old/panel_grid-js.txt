@@ -1,0 +1,118 @@
+function renderDetailsPanel(model, type) {
+  const panel = document.querySelector('.panel-grid');
+  if (!panel) {
+    console.warn('renderDetailsPanel: .panel-grid not found.');
+    return;
+  }
+  clearNode(panel);
+
+  // Controls
+  const controls = createEl('div', [], { id: 'controls' });
+  const closeBtn = createEl('button', ['closeBtn']);
+  closeBtn.type = 'button';
+  closeBtn.textContent = 'Close';
+  closeBtn.addEventListener('click', () => togglePanel(false));
+  controls.appendChild(closeBtn);
+  panel.appendChild(controls);
+
+  // Card
+  const card = createEl('div', ['panel-card', 'pCard']);
+
+  // Poster
+  const posterDiv = createEl('div');
+  const poster = createEl('img', ['panel-poster'], { alt: model.title || model.name || 'Poster' });
+  // Movie has title; TVShow has name
+  const posterUrl = (typeof model.getPosterUrl === 'function')
+    ? model.getPosterUrl('w342')
+    : (model.posterPath ? `https://image.tmdb.org/t/p/w342${model.posterPath}` : 'assets/images/noImage.png');
+  poster.src = posterUrl;
+  posterDiv.appendChild(poster);
+
+  // Details
+  const details = createEl('div', ['pDetails']);
+  const header = createEl('div', ['pTitle']);
+
+  const h2 = createEl('h2');
+  h2.textContent = safeText(model.title ?? model.name, 'Untitled');
+
+  const date = createEl('span');
+  const dateVal = type === 'movie' ? (model.releaseDate ?? null) : (model.firstAirDate ?? null);
+  date.textContent = safeText(dateVal, 'Date not available');
+
+  const typeChip = createEl('span', ['pType']);
+  typeChip.textContent = type === 'movie' ? 'Movie' : 'Series';
+
+  const metaRow = createEl('div', ['pMeta']);
+  metaRow.appendChild(date);
+  metaRow.appendChild(typeChip);
+
+  header.appendChild(h2);
+  header.appendChild(metaRow);
+
+  const overviewDiv = createEl('div', ['sOverview']);
+  const overview = createEl('p');
+  overview.textContent = truncate(safeText(model.overview, 'Overview not available'), 300);
+  overviewDiv.appendChild(overview);
+
+  details.appendChild(header);
+  details.appendChild(overviewDiv);
+
+  // Assemble
+  card.appendChild(posterDiv);
+  card.appendChild(details);
+  panel.appendChild(card);
+}
+
+// =============================
+// Panel (vanilla animation)
+// =============================
+function togglePanel(open) {
+  const panel = document.querySelector('.panel-grid');
+  if (!panel) return;
+  const isOpen = open ?? !titlePanelOpen;
+  panel.style.transition = 'bottom 300ms ease';
+  panel.style.bottom = isOpen ? '0' : '-550px';
+  titlePanelOpen = isOpen;
+}
+
+function renderErrorPanel(message) {
+  const panel = document.querySelector('.panel-grid');
+  if (!panel) return;
+  clearNode(panel);
+  const p = createEl('p', ['error']);
+  p.textContent = message;
+  panel.appendChild(p);
+}
+
+// =============================
+// Non-blocking UI feedback (stub)
+// =============================
+function showLoading() { /* add spinner logic here */ }
+function hideLoading() {}
+function showLoadingPanel() {}
+function hideLoadingPanel() {}
+
+// =============================
+// Event wiring
+// =============================
+
+// Debounce input to limit requests
+const searchInput = document.querySelector('#txtSearch');
+if (searchInput) {
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => searchTitles({ page: 1 }), 300);
+  });
+}
+
+// Delegate clicks from grid to details
+const searchGridEl = document.querySelector('.search-grid');
+if (searchGridEl) {
+  searchGridEl.addEventListener('click', (evt) => {
+    const img = evt.target.closest('img.search-poster');
+    if (!img) return;
+    const id = img.getAttribute('data-id');
+    const type = img.getAttribute('data-type'); // 'movie' | 'tv'
+    getTitleDetails({ id, type });
+  });
+}

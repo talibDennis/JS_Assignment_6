@@ -46,7 +46,7 @@
 }
 
 .nav-brand-logo {
-  height: 80px;
+  height: 50px;
   width: auto;
   margin-right: var(--space-3);
   transition: transform 0.2s ease;
@@ -71,8 +71,7 @@
 .nav-links a {
   text-decoration: none;
   color: var(--gray-50);
-  font-weight: 900;
-  font-size: larger;
+  font-weight: 500;
   transition: color 0.2s ease;
   position: relative;
   padding: var(--space-2) 0;
@@ -102,11 +101,10 @@
 }
 
 .nav-action-icons {
-  height: 35px;
+  height: 40px;
   width: auto;
   margin-right: var(--space-3);
   transition: transform 0.2s ease;
-  cursor: pointer;
 }
 
 .admin-link {
@@ -351,39 +349,19 @@
 
 .hero {
   padding: 0;
-  /* background: linear-gradient(135deg, var(--gray-50) 0%); */
-  /* background-image: url(../assets/images/hero.png); */
-background: #BA8B02;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to top, #181818, #BA8B02);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to top, #181818, #BA8B02); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  background: linear-gradient(135deg, var(--gray-50) 0%);
+  background-image: url(../assets/images/hero.png);
   background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
 }
 
-.hero-content {
+.hero-content, .search-content {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-12);
   padding: 30px 40px;
   align-items: center;
-}
-
-.search-box {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-12);
-  padding: 30px 40px;
-  align-items: center;
-}
-
-.search-content {
-  display: grid;
-  grid-template-columns: 2fr 6fr;
-  gap: var(--space-2);
-  padding: 30px 40px;
-  align-items: flex-start;
 }
 
 .hero-text {
@@ -508,7 +486,7 @@ background: linear-gradient(to top, #181818, #BA8B02); /* W3C, IE 10+/ Edge, Fir
 }
 
 .section-header h2 {
-  font-size: 1.7rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: var(--space-4);
 }
@@ -1343,7 +1321,7 @@ background: linear-gradient(to top, #181818, #BA8B02); /* W3C, IE 10+/ Edge, Fir
 
 .footer-content {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: var(--space-12);
   margin-bottom: var(--space-16);
 }
@@ -1366,7 +1344,7 @@ background: linear-gradient(to top, #181818, #BA8B02); /* W3C, IE 10+/ Edge, Fir
 }
 
 .footer-brand-logo {
-  height: 95px;
+  height: 58px;
   width: auto;
   margin-right: var(--space-3);
 }

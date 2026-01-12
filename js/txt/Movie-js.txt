@@ -1,21 +1,18 @@
 
 class Movie {
-  constructor(id, backdropPath = null, title, overview = null, releaseDate = null, posterPath = null, voteAverage = 0, genres = [], runtime = null, adult = false, video = false, status = null, tagline = null, certification = null, credits = {cast: [], crew: []}) {
+  constructor(id, backdropPath = null, title, overview = null, releaseDate = null, posterPath = null, voteAverage = 0, genres = [], runtime = null, adult = false, video = false, status = null,) {
     this.id = id;
     this.backdropPath = backdropPath;
     this.title = title;
     this.overview = overview;
     this.releaseDate = releaseDate;
     this.posterPath = posterPath;
-    this.voteAverage = voteAverage;
+    this.voteAverage = Number.isFinite(Number.isFinite(voteAverage)) ? Number(voteAverage) : 0;
     this.genres = Array.isArray(genres) ? genres : [];
     this.runtime = runtime;     // minutes
     this.adult = adult;
     this.video = video;
     this.status = status;       // "Released", "Post Production", etc.
-    this.tagline = tagline;                 // NEW
-    this.certification = certification;     // NEW
-    this.credits = credits;                 // NEW
   }
 
   static fromJson(json) {
@@ -32,10 +29,6 @@ class Movie {
       json.adult ?? false,
       json.video ?? false,
       json.status ?? null,
-      json.tagline ?? null,                     // NEW
-      json.tagline ?? null,                     // NEW
-      json.certification ?? null,               // certification to be set after extra fetch     
-      json.credits = { cast: [], crew: [] },       // credits to be set after extra fetch
     );
   }
   

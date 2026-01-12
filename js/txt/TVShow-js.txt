@@ -28,8 +28,6 @@ class TVShow {
     popularity = 0,
     tagline = null,
     homepage = null,
-    certification = null,            // NEW (e.g., "TV-MA")
-    credits = {cast: [], crew: []}, // NEW
   ) {
 
     this.id = id;
@@ -62,8 +60,6 @@ class TVShow {
     this.popularity = popularity;
     this.tagline = tagline;
     this.homepage = homepage;
-    this.certification = certification;      // NEW
-    this.credits = credits;                  // NEW
   }
 
   static fromJson(json) {
@@ -98,8 +94,6 @@ class TVShow {
       Number(json.popularity) || 0,
       json.tagline ?? null,
       json.homepage ?? null,
-      json.certification ?? null,               // certification to be set after extra fetch     
-      json.credits = { cast: [], crew: [] },       // credits to be set after extra fetch
     );
   }
 

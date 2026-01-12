@@ -36,13 +36,13 @@ function renderMovies(movies, max) {
 
     // *********** Score ***********
     const mScoreActions = document.createElement('div');
-    mScoreActions.classList.add('score-actions');
+    mScoreActions.classList.add('iScore-actions');
     
     const mScoreBadge = document.createElement('div');
     // ** if statement will decide class **
 
     const score = document.createElement('span');
-    score.classList.add('score-badge__value');
+    score.classList.add('iScore-badge__value');
 
     const mScore = show.getScorePercentage(); // Convert to percentage
     console.log(mScore);
@@ -54,11 +54,11 @@ function renderMovies(movies, max) {
 
     // Apply color class based on score
     if (nScore >= 7) {
-      mScoreBadge.classList.add('score-badge', 'score-high'); // Green
+      mScoreBadge.classList.add('iScore-badge', 'score-high'); // Green
     } else if (nScore >= 5) {
-      mScoreBadge.classList.add('score-badge', 'score-medium'); // Yellow
+      mScoreBadge.classList.add('iScore-badge', 'score-medium'); // Yellow
     } else {
-      mScoreBadge.classList.add('score-badge', 'score-low'); // Red
+      mScoreBadge.classList.add('iScore-badge', 'score-low'); // Red
     }
 
     // *********** Details ***********
