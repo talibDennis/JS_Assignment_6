@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <meta cahrset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height">
     <meta name="author" content="Joseph Dennis">
+    <link rel="apple-touch-icon" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-iphone-60x60-1.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-ipad-76x76-1.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-iphone-retina-120x120-1.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-ipad-retina-152x152-1.png">
+    <link rel="icon" type="image/x-icon" href="https://venture31.com/wp-content/uploads/2024/11/V31_icon_88px.png">
+    <meta property="og:title" content="Fadeout">
+    <meta property="og:type" content="Movie Database">
+    <meta property="og:url" content="https://fadeout0.netlify.app/">
+    <meta property="og:image" content="assets/logoFullCropped.png">
+    <meta property="og:image:alt" content="Logo, film recorder">
+    <meta property="og:description" content="Search Millions of movies & shows!">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="css/main.css">
@@ -26,13 +37,13 @@
             <div class="nav-content">
               <div class="nav-brand">
                 <a class="nav-brand-link" (click)="closeMobileMenu()">
-                  <img class="nav-brand-logo" src="assets/logoFullCropped.png" alt="Fadeout">
+                  <img class="brand-logo" src="assets/logoFullCropped.png" alt="Fadeout">
                   <span class="nav-brand-text"></span>
                 </a>
               </div>
               
               <div class="nav-links">
-                <a class="active" href="#movies">Movies</a>
+                <a href="#movies">Movies</a>
                 <a href="#tv">TV Shows</a>
                 <a href="#ftw">Free to Watch</a>
                 <a href="search.html">Search</a>
@@ -41,10 +52,10 @@
               <div class="nav-actions">
                 <a class="cart-link" title="Nav Actions">
                   <div class="cart-icon">
-                    <img class="nav-action-icons" src="assets/facebook.png" alt="plusIcon">
-                    <img class="nav-action-icons" src="assets/twitter.png" alt="searchIcon">
-                    <img class="nav-action-icons" src="assets/instagram.png" alt="moreIcon">
-                    <img class="nav-action-icons" src="assets/linkedin.png" alt="plusIcon">
+                    <img class="nav-action-icons" src="assets/facebook.png" alt="facebook">
+                    <img class="nav-action-icons" src="assets/twitter.png" alt="twitter">
+                    <img class="nav-action-icons" src="assets/instagram.png" alt="instagram">
+                    <img class="nav-action-icons" src="assets/linkedin.png" alt="linkedin">
                   </div>
                 </a>
               </div>
@@ -62,7 +73,7 @@
           <div class="mobile-menu-content">
             <a href="#movies">Movies</a>
             <a href="#tv">TV Shows</a>
-            <a href="watchlist.html">Watchlist</a>
+            <a href="#ftw">Free to Watch</a>
             <a href="search.html">Search</a>
             <div class="mobile-menu-divider"></div>
             <div class="mobile-auth-buttons">
@@ -543,28 +554,10 @@
                       <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg" alt="Captain Hook: The Cursed Tides poster">
                       <figcaption class="sr-only">Trailer</figcaption>
                     </figure>
-                    <div class="poster-card__cta">
-                      <!-- <img src="assets/hooke-logo.svg" class="poster-card__service-logo" alt="Hooke service logo"> -->
-                      <!-- <a href="#watch" class="btn btn--primary">Watch Now</a> -->
-                    </div>
                   </aside> <!-- Left: Poster Card -->
 
                   <!-- Right: Info Panel -->
                   <div class="info-panel">
-
-                    <!-- Movie Trailer -->
-                    <div class="video-embed" aria-label="Trailer">
-                      <iframe
-                        class="video-embed__frame"
-                        src="https://www.youtube-nocookie.com/embed/VVrs2GQmUOs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1"
-                        title="Captain Hook: The Cursed Tides — Trailer"
-                        loading="lazy"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen
-                        referrerpolicy="strict-origin-when-cross-origin">
-                      </iframe>
-                    </div>
-
                     <!-- Movie Info -->
                     <header class="info-panel__header">
                       <h1 class="title">
@@ -586,10 +579,7 @@
                       </div>
 
                       <nav class="actions" aria-label="Quick actions">
-                        <button class="icon-btn" aria-label="Add to favorites">❤️</button>
-                        <button class="icon-btn" aria-label="Add to list">➕</button>
-                        <button class="icon-btn" aria-label="Share">🔗</button>
-                        <a href="#trailer" class="btn btn--ghost">▶ Play Trailer</a>
+                        <a href="#trailer" class="btn btn--ghost" target="_blank" rel="noopener">▶ Play Trailer</a>
                       </nav>
                     </section>
 
@@ -647,7 +637,7 @@
             <div class="footer-section">
               <div class="footer-brand">
                 <a class="footer-brand-link">
-                  <img src="assets/logoFullCropped.png" alt="Fadeout" class="footer-brand-logo">
+                  <img src="assets/logoFullCropped.png" alt="Fadeout" class="brand-logo">
                   <span class="footer-brand-text"></span>
                 </a>
               </div>

@@ -87,7 +87,14 @@ function selectTopCredits(credits, type = 'movie') {
     if (metaEls[3]) metaEls[3].textContent = formatRuntime(movie.runtime);
 
     if (scoreEl) scoreEl.textContent = movie.getScorePercentage();
-    if (trailerEl) trailerEl.href = `https://www.youtube.com/watch?v=${movie.trailerKey}`;
+
+    if (trailerEl && movie.trailerKey) {
+      trailerEl.href = `https://www.youtube.com/watch?v=${movie.trailerKey}`;
+    } else if (trailerEl) {
+      trailerEl.removeAttribute('href');
+      trailerEl.classList.add('is-disabled');
+    }
+
     if (taglineEl) taglineEl.textContent = movie.tagline ?? '';
     if (overviewP) overviewP.textContent = movie.overview ?? '';
 
@@ -134,7 +141,14 @@ function selectTopCredits(credits, type = 'movie') {
     }
 
     if (scoreEl) scoreEl.textContent = show.getScorePercentage();
-    if (trailerEl) trailerEl.href = `https://www.youtube.com/watch?v=${show.trailerKey}`;
+
+    if (trailerEl && show.trailerKey) {
+      trailerEl.href = `https://www.youtube.com/watch?v=${show.trailerKey}`;
+    } else if (trailerEl) {
+      trailerEl.removeAttribute('href');
+      trailerEl.classList.add('is-disabled');
+    }
+
     if (taglineEl) taglineEl.textContent = show.tagline ?? '';
     if (overviewP) overviewP.textContent = show.overview ?? '';
 
