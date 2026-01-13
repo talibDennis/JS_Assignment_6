@@ -74,7 +74,7 @@
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px 20px;
+  padding: 18px 10px;
   display: grid;
   grid-template-rows: auto auto auto auto auto;
   gap: 14px;
@@ -260,6 +260,9 @@
 /* Constrain for large screens */
 @media (min-width: 1024px) {
   .lightbox .movie-hero__content { max-width: 1200px; }
+
+  .info-panel { height: auto; width: auto; }
+  .lightbox__content { font-size: 1.2rem; }
 }
 
 
@@ -270,17 +273,55 @@
   .lightbox__content { height: auto; width: auto;}
   .poster-card { display: none; }
   .poster-card__figure img { display: none; }
-  .info-panel { height: 550px; width: 450px; left: -30px; }
+  .info-panel { height: auto; width: auto; left: 10px; }
+  .lightbox__content { font-size: 0.9rem; }
+
+  .movie-hero {
+    /* grid-template-columns: minmax(100px, 480px) 1fr;
+    gap: clamp(5px, 1vw, var(--gap)); */
+    width: 600px;
+  }
+  .movie-hero__content {
+    grid-template-columns: minmax(100px, 480px) 1fr;
+    gap: clamp(5px, 1vw, var(--gap));
+  }
+  .lightbox .movie-hero {
+    height: auto;
+    width: auto;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg);
+    /* padding: 24px; */
+  }
 }
 
 
 /* 3) Reduce inner padding on narrow screens so inset + padding don't stack too much */
 @media (max-width: 720px) {
-  .lightbox__content {
-    font-size: .6rem;
+  .poster-card { order: 1; }
+  .info-panel { order: 2; }
+  .lightbox__content { height: auto; width: auto;}
+  .poster-card { display: none; }
+  .poster-card__figure img { display: none; }
+  .info-panel { height: auto; width: auto; left: -85px; top: 15px; }
+
+  .lightbox__content { font-size: 0.9rem; }
+
+  .movie-hero {
+    /* grid-template-columns: minmax(100px, 480px) 1fr;
+    gap: clamp(5px, 1vw, var(--gap)); */
+    width: 600px;
+  }
+  .movie-hero__content {
+    grid-template-columns: minmax(100px, 480px) 1fr;
+    gap: clamp(5px, 1vw, var(--gap));
   }
   .lightbox .movie-hero {
-    padding: 5px;
+    height: auto;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg);
+    /* padding: 24px; */
   }
   .movie-hero__content {
     grid-template-columns: minmax(200px, 380px) 1fr;
@@ -300,12 +341,6 @@
     right: 12px;
   }
 
-  .poster-card { order: 1; }
-  .info-panel { order: 2; }
-  .lightbox__content { height: auto; width: auto;}
-  .poster-card { display: none; }
-  .poster-card__figure img { display: none; }
-  .info-panel { height: 450px; width: 350px; left: -60px; top: 15px; }
 
   /* Use aspect-ratio for modern browsers */
   .video-embed__frame {
@@ -321,14 +356,22 @@
 
 /* Small Mobile Styles */
 @media (max-width: 480px) {
-  .movie-hero__content {
-    grid-template-columns: minmax(100px, 480px) 1fr;
-    gap: clamp(5px, 1vw, var(--gap));
-  }
+  .poster-card { order: 1; }
+  .info-panel { order: 2; }
+  .lightbox__content { height: auto; width: auto;}
+  .poster-card { display: none; }
+  .poster-card__figure img { display: none; }
+  
+  .info-panel { height: 675px; width: 325px; left: -60px; top: 15px; }
+
   .movie-hero {
     /* grid-template-columns: minmax(100px, 480px) 1fr;
     gap: clamp(5px, 1vw, var(--gap)); */
     width: 400px;
+  }
+  .movie-hero__content {
+    grid-template-columns: minmax(100px, 480px) 1fr;
+    gap: clamp(5px, 1vw, var(--gap));
   }
   .lightbox .movie-hero {
     height: 90%;
@@ -336,11 +379,5 @@
     overflow: hidden;
     background: var(--bg);
     /* padding: 24px; */
-  }
-  .info-panel {
-    height: 675px;
-    width: 325px;
-    left: -60px;
-    top: 15px;
   }
 }
