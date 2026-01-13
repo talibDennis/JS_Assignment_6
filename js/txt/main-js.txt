@@ -10,3 +10,21 @@ window.addEventListener('DOMContentLoaded', () => {
   loadMovies({ apiKey: API_KEY, baseUrl: BASE_URL, max: MAX_TRENDS }); // from your file
   loadTV({ apiKey: API_KEY, baseUrl: BASE_URL, max: MAX_TRENDS });     // from your file
 });
+
+//==================>>
+//== MENU CODE ==>>
+let menuOpen = false;
+
+function toggleMenu() {
+  if(!menuOpen) { // it's closed so open the menu
+    $('mobile-menu').animate({
+      right: 0
+    }, 320, 'swing');
+  }
+  else { // it's open now close the menu
+    $('mobile-menu').animate({
+      right: -226
+    }, 260, 'swing');
+  }
+  menuOpen = !menuOpen; // very common short-cut
+} // toggleMenu()

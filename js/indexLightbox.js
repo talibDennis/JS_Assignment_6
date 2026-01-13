@@ -87,7 +87,7 @@ function selectTopCredits(credits, type = 'movie') {
     if (metaEls[3]) metaEls[3].textContent = formatRuntime(movie.runtime);
 
     if (scoreEl) scoreEl.textContent = movie.getScorePercentage();
-    if (trailerEl) trailerEl.href = `https://www.youtube.com/watch?v=${movie.trailerKey}`;
+    if (trailerEl) trailerEl.href = `https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
     if (taglineEl) taglineEl.textContent = movie.tagline ?? '';
     if (overviewP) overviewP.textContent = movie.overview ?? '';
 
@@ -134,7 +134,7 @@ function selectTopCredits(credits, type = 'movie') {
     }
 
     if (scoreEl) scoreEl.textContent = show.getScorePercentage();
-    if (trailerEl) trailerEl.href = `https://www.youtube.com/watch?v=${show.trailerKey}`;
+    if (trailerEl) trailerEl.href = `https://www.youtube.com/embed/${show.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
     if (taglineEl) taglineEl.textContent = show.tagline ?? '';
     if (overviewP) overviewP.textContent = show.overview ?? '';
 

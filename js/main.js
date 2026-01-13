@@ -9,22 +9,18 @@ const MAX_TRENDS = 20;
 window.addEventListener('DOMContentLoaded', () => {
   loadMovies({ apiKey: API_KEY, baseUrl: BASE_URL, max: MAX_TRENDS }); // from your file
   loadTV({ apiKey: API_KEY, baseUrl: BASE_URL, max: MAX_TRENDS });     // from your file
+  
+  // const searchBtn = document.querySelector('.search_action');
+  // if (searchBtn) {
+  //   searchBtn.addEventListener('click', () => {
+  //     window.location.href = 'search.html';
+  //   });
+  //   searchBtn.addEventListener('keydown', (e) => {
+  //     if (e.key === 'Enter' || e.key === ' ') {
+  //       e.preventDefault();
+  //       searchBtn.click();
+  //     }
+  //   });
+  // }
+  
 });
-
-//==================>>
-//== MENU CODE ==>>
-let menuOpen = false;
-
-function toggleMenu() {
-  if(!menuOpen) { // it's closed so open the menu
-    $('nav').animate({
-      right: 0
-    }, 320, 'swing');
-  }
-  else { // it's open now close the menu
-    $('nav').animate({
-      right: -226
-    }, 260, 'swing');
-  }
-  menuOpen = !menuOpen; // very common short-cut
-} // toggleMenu()

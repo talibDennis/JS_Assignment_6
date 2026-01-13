@@ -106,17 +106,6 @@
   border: 0;
 }
 
-.info-panel {
-  backdrop-filter: blur(1px);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  display: grid;
-  grid-template-rows: auto auto auto auto auto;
-  gap: 5px;
-}
-
 /* Title & Meta */
 .title {
   font-size: clamp(22px, 4vw, 26px);
@@ -315,6 +304,33 @@
     height: 100%;
     display: block;
     border: 0;
+  }
+}
+
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+  .movie-hero__content {
+    grid-template-columns: minmax(100px, 480px) 1fr;
+    gap: clamp(5px, 1vw, var(--gap));
+  }
+  .movie-hero {
+    /* grid-template-columns: minmax(100px, 480px) 1fr;
+    gap: clamp(5px, 1vw, var(--gap)); */
+    width: 400px;
+  }
+  .lightbox .movie-hero {
+    height: 90%;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg);
+    /* padding: 24px; */
+  }
+  .info-panel {
+    height: 675px;
+    width: 325px;
+    left: -60px;
+    top: 15px;
   }
 }
 
