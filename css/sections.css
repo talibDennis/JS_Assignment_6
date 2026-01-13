@@ -199,9 +199,9 @@
   overflow-y: auto;
 }
 
-.mobile-menu.open {
-  /* transform: translateX(0); */
-}
+/* .mobile-menu.open {
+  transform: translateX(0);
+} */
 
 .mobile-menu-content {
   padding: 100px var(--space-6) var(--space-6);
@@ -1481,5 +1481,3 @@
   #copy { order: 2; text-align: center; }
   .footer-bottom-links { order: 1; text-align: center; }
 }
-
-

@@ -166,6 +166,37 @@ body {
   line-height: 1.25rem;
 }
 
+
+.btn2, .ann {
+  width: 170px;
+  height: 60px;
+  font-size: 30px;
+  text-align: center;
+  line-height: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 50px;
+  background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+  background-size: 600%;
+  cursor: pointer;
+  white-space: nowrap;
+  animation: anime 16s linear infinite;
+}
+
+.btn2 {
+  position: absolute;
+  margin-top: -70px;
+  z-index: -1;
+  filter: blur(30px);
+  opacity: 0.8;
+}
+
+@keyframes anime {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
 .btn-primary {
   background-color: var(--primary-600);
   color: white;
