@@ -8,7 +8,7 @@ export async function loadMovies({ apiKey, baseUrl, max = 20 }) {
   renderMovies(items, max);
 }
 
-// date prittier
+// date prettier
 function formatTMDBDate(dateStr, locale = 'en-US') {
   if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
   const [y, m, d] = dateStr.split('-').map(Number);
