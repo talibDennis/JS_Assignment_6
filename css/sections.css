@@ -594,6 +594,55 @@
     padding: 10px 20px;
 } */
 
+/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+/* Ensure the native clear icon is visible and clickable */
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: 
+    linear-gradient(#fff, #fff) padding-box,
+    radial-gradient(closest-side, transparent 7px, rgba(0,0,0,0.25) 8px) border-box;
+  border: 1px solid rgba(0,0,0,0.15);
+  cursor: pointer;
+  opacity: .8;
+  transition: transform .15s ease, opacity .15s ease, background-color .15s ease;
+}
+
+/* Provide a custom X glyph using a mask (nice crisp vector) */
+.search-input::-webkit-search-cancel-button {
+  background-color: #666;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path stroke="%23fff" stroke-linecap="round" stroke-width="2" d="M4 4l8 8M12 4L4 12"/></svg>') center / 10px 10px no-repeat, none;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path stroke="%23fff" stroke-linecap="round" stroke-width="2" d="M4 4l8 8M12 4L4 12"/></svg>') center / 10px 10px no-repeat, none;
+  background: none; /* we’re using mask for the icon now */
+  border: none;
+}
+
+/* Hover/active/disabled states */
+.search-input::-webkit-search-cancel-button:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+.search-input:disabled::-webkit-search-cancel-button {
+  opacity: .3;
+  cursor: not-allowed;
+}
+
+/* Dark mode nicety */
+@media (prefers-color-scheme: dark) {
+  .search-input {
+    color: #2d2c2c;
+    background: #b6b6b663;
+    border: 1px solid #333;
+  }
+  .search-input::-webkit-search-cancel-button {
+    background-color: #000000; /* color of the masked X */
+    opacity: .9;
+  }
+}
+/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 /* ********* Media ********* */
 .movies, .tv, .ftw {
