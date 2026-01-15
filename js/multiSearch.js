@@ -55,6 +55,20 @@ function createEl(tag, classNames = [], attrs = {}) {
   return el;
 }
 
+// Parse "YYYY-MM-DD" without timezone surprises and format as "June 11, 2022".
+function formatTMDBDate(dateStr, locale = 'en-US') {
+  if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  const formatter = new Intl.DateTimeFormat(locale, {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+  return formatter.format(date); // e.g., "June 11, 2022"
+}
+
 function formatRuntime(mins) {
   if (!Number.isFinite(mins) || mins <= 0) return '';
   const h = Math.floor(mins / 60);
@@ -169,7 +183,7 @@ function renderSearchGrid(items) {
     // Poster
     const posterDiv = createEl('div');
     const poster = createEl('img', ['search-poster'], {
-      alt: t.title || 'Untitled',
+      alt: t.title ?? 'Untitled',
       'data-id': t.id,
       'data-type': t.type,
     });
@@ -187,7 +201,8 @@ function renderSearchGrid(items) {
 
     const metaRow = createEl('div', ['sMeta']);
     const date = createEl('span', ['sDate']);
-    date.textContent = safeText(t.date, 'Date not available');
+    const pretty = formatTMDBDate(t.date, 'en-US');
+    date.textContent = pretty ?? 'Date not available';
 
     const typeChip = createEl('span', ['sType']);
     typeChip.textContent = t.type === 'movie' ? 'Movie' : 'TV Show';
@@ -385,10 +400,16 @@ function setDialogFromMovie(movie) {
   if (titleEl) titleEl.childNodes[0] && titleEl.childNodes[0].nodeType === 3
     ? (titleEl.childNodes[0].nodeValue = (movie.title ?? 'Untitled') + ' ')
     : (titleEl.textContent = (movie.title ?? 'Untitled'));
-  if (yearEl && movie.releaseDate) yearEl.textContent = `(${new Date(movie.releaseDate).getFullYear()})`;
+  if (yearEl && movie.releaseDate) {
+    const y = movie.releaseDate.slice(0,4);
+    yearEl.textContent = /^\d{4}$/.test(y) ? `(${y})` : '';
+  }
 
   // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime)
-  if (metaEls[0]) metaEls[0].textContent = movie.releaseDate ?? 'Date not available';
+  if (metaEls[0]) {
+    const pretty = formatTMDBDate(movie.releaseDate, 'en-US');
+    metaEls[0].textContent = pretty ?? 'Date not available';
+  }
   if (metaEls[1]) metaEls[1].textContent = movie.certification ? movie.certification : '';
   if (metaEls[2]) metaEls[2].textContent = formatGenres(movie.genres);
   if (metaEls[3]) metaEls[3].textContent = formatRuntime(movie.runtime);
@@ -464,7 +485,10 @@ function setDialogFromTV(show) {
   if (yearEl && show.firstAirDate) yearEl.textContent = `(${new Date(show.firstAirDate).getFullYear()})`;
 
   // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime/episode)
-  if (metaEls[0]) metaEls[0].textContent = show.firstAirDate ?? 'Date not available';
+  if (metaEls[0]) {
+    const pretty = formatTMDBDate(show.firstAirDate, 'en-US');
+    metaEls[0].textContent = pretty ?? 'Date not available';
+  }
   if (metaEls[1]) metaEls[1].textContent = show.certification ? show.certification : '';
   if (metaEls[2]) metaEls[2].textContent = formatGenres(show.genres);
   if (metaEls[3]) {

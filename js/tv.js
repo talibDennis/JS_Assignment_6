@@ -8,6 +8,19 @@ export async function loadTV({ apiKey, baseUrl, max = 20 }) {
   renderTV(items, max);
 }
 
+// date prittier
+function formatTMDBDate(dateStr, locale = 'en-US') {
+  if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date);
+}
+
 function renderTV(tvShows, max) {
   const head = document.querySelector('.tvHead');
   const grid = document.querySelector('.tv-grid');
@@ -72,7 +85,8 @@ function renderTV(tvShows, max) {
     title.textContent = show.name || 'Untitled';
 
     const date = document.createElement('span');
-    date.textContent = show.firstAirDate || 'Date not available';
+    const pretty = formatTMDBDate(show.firstAirDate, 'en-US'); // <-- format here
+    date.textContent = pretty ?? 'Date not available';
 
     // >>>> build divs <<<<<
     mScoreBadge.appendChild(score);

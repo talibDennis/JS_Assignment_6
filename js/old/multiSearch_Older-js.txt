@@ -348,8 +348,9 @@ async function getTitleDetails({ id, type }) {
 
   function stopEmbeddedVideo() {
     const iframe = dialog.querySelector('.video-embed__frame');
-    if (iframe && iframe.parentNode) {
-      iframe.parentNode.removeChild(iframe);
+    if (iframe) {
+      const src = iframe.getAttribute('src');
+      iframe.setAttribute('src', src); // reload to stop playback
     }
   }
 
@@ -414,32 +415,15 @@ function setDialogFromMovie(movie) {
     });
   }
 
-  // Trailer (create if needed, remove if missing)
-  const embedWrapper = dialog.querySelector('.video-embed');
-  let iframeEl = dialog.querySelector('.video-embed__frame');
-
-  if (movie.trailerKey) {
-    // Ensure iframe exists
-    if (!iframeEl && embedWrapper) {
-      iframeEl = document.createElement('iframe');
-      iframeEl.className = 'video-embed__frame';
-      iframeEl.title = 'Trailer';
-      iframeEl.loading = 'lazy';
-      iframeEl.allow =
-        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
-      iframeEl.referrerPolicy = 'strict-origin-when-cross-origin';
-      iframeEl.allowFullscreen = true;
-      embedWrapper.appendChild(iframeEl);
-    }
-    if (iframeEl) {
-      iframeEl.src =
-        `https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
+  // Trailer
+  const iframeEl = dialog.querySelector('.video-embed__frame');
+  if (iframeEl) {
+    if (movie.trailerKey) {
+      iframeEl.src = `https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
       iframeEl.hidden = false;
-    }
-  } else {
-    // No trailer: remove iframe element entirely
-    if (iframeEl && iframeEl.parentNode) {
-      iframeEl.parentNode.removeChild(iframeEl);
+    } else {
+      iframeEl.hidden = true;
+      iframeEl.removeAttribute('src');
     }
   }
 }
@@ -493,31 +477,15 @@ function setDialogFromTV(show) {
     });
   }
 
-
-  // Trailer (create if needed, remove if missing)
-  const embedWrapper = dialog.querySelector('.video-embed');
-  let iframeEl = dialog.querySelector('.video-embed__frame');
-
-  if (show.trailerKey) {
-    if (!iframeEl && embedWrapper) {
-      iframeEl = document.createElement('iframe');
-      iframeEl.className = 'video-embed__frame';
-      iframeEl.title = 'Trailer';
-      iframeEl.loading = 'lazy';
-      iframeEl.allow =
-        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
-      iframeEl.referrerPolicy = 'strict-origin-when-cross-origin';
-      iframeEl.allowFullscreen = true;
-      embedWrapper.appendChild(iframeEl);
-    }
-    if (iframeEl) {
-      iframeEl.src =
-        `https://www.youtube.com/embed/${show.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
+  // Trailer
+  const iframeEl = dialog.querySelector('.video-embed__frame');
+  if (iframeEl) {
+    if (show.trailerKey) {
+      iframeEl.src = `https://www.youtube.com/embed/${show.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
       iframeEl.hidden = false;
-    }
-  } else {
-    if (iframeEl && iframeEl.parentNode) {
-      iframeEl.parentNode.removeChild(iframeEl);
+    } else {
+      iframeEl.hidden = true;
+      iframeEl.removeAttribute('src');
     }
   }
 }

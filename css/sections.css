@@ -793,6 +793,14 @@
 .search-card {
   display: flex;
   text-align: left;
+  /* display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  background: #fff;
+  margin: 8px 0; */
 }
 
 .search-icon {
@@ -812,18 +820,33 @@
   text-align: left;
 }
 
+.sTitle {
+  padding-top: 10px;
+}
+.sOverview {
+  margin-top: 10px;
+}
 .sDetails {
   margin-left: 10px;
 }
 
-.sTitle {
-  padding-top: 10px;
+.sDate {
+  font-size: 13px;
+  color: #6b7280;
 }
-
-.sOverview {
-  margin-top: 10px;
+.sType {
+  margin-left: 10px;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #032541;
+  color: #90CEA1;
 }
-
+.sOverview p {
+  margin: 0;
+  color: #374151;
+  font-size: 14px;
+}
 .sOverview p {
   display: -webkit-box;
   -webkit-line-clamp: 2; /* Limit to 2 lines */
