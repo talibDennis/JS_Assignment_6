@@ -3,25 +3,14 @@
 <html lang="en-US">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height">
     <meta name="author" content="Joseph Dennis">
-    <link rel="apple-touch-icon" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-iphone-60x60-1.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-ipad-76x76-1.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-iphone-retina-120x120-1.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="https://venture31.com/wp-content/uploads/2025/11/apple-touch-icon-ipad-retina-152x152-1.png">
-    <link rel="icon" type="image/x-icon" href="https://venture31.com/wp-content/uploads/2024/11/V31_icon_88px.png">
-    <meta property="og:title" content="Fadeout">
-    <meta property="og:type" content="Movie Database">
-    <meta property="og:url" content="https://fadeout0.netlify.app/">
-    <meta property="og:image" content="assets/logoFullCropped.png">
-    <meta property="og:image:alt" content="Logo, film recorder">
-    <meta property="og:description" content="Search Millions of movies & shows!">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/global_styles.css">
     <link rel="stylesheet" href="css/sections.css">
     <link rel="stylesheet" href="css/lightbox.css">
+    <script src="js/jquery.js" async defer></script> <!-- (not used by this page, you can drop it) -->
     <script src="js/Movie.js" async defer></script>
     <script src="js/TVShow.js" async defer></script>
     <script src="js/multiSearch.js" async defer></script>
@@ -31,37 +20,36 @@
   <body>
     <div class="app">
       <!-- Header Section -->
-      <header class="header" id="appHeader">
+      <header class="header" [class.hidden]="isHeaderHidden">
         <nav class="nav">
           <div class="container">
             <div class="nav-content">
               <div class="nav-brand">
-                <a class="nav-brand-link" href="index.html" rel="noopener">
-                  <img class="brand-logo" src="assets/logoFullCropped.png" alt="Fadeout">
+                <a class="nav-brand-link" (click)="closeMobileMenu()">
+                  <img class="nav-brand-logo" src="assets/images/filmLogo.png" alt="Fadeout">
                   <span class="nav-brand-text"></span>
-                </a>
                 </a>
               </div>
               
               <div class="nav-links">
                 <a href="index.html">Movies</a>
-                <a href="#tv">TV Shows</a>
-                <a href="#ftw">Free to Watch</a>
+                <a href="index.html">TV Shows</a>
+                <a href="watchlist.html">Watchlist</a>
                 <a href="#search">Search</a>
               </div>
               
               <div class="nav-actions">
                 <a class="cart-link" title="Nav Actions">
                   <div class="cart-icon">
-                    <img class="nav-action-icons" src="assets/facebook.png" alt="facebook">
-                    <img class="nav-action-icons" src="assets/twitter.png" alt="twitter">
-                    <img class="nav-action-icons" src="assets/instagram.png" alt="instagram">
-                    <img class="nav-action-icons" src="assets/linkedin.png" alt="linkedin">
+                    <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon" onclick="toggleMoviePanel();">
+                    <img class="nav-action-icons" src="assets/images/moreIconWhite.svg" alt="moreIcon">
+                    <img class="nav-action-icons" src="assets/images/plusIconWhite.svg" alt="plusIcon">
+                    <img class="nav-action-icons" src="assets/images/searchIconBlue.svg" alt="searchIcon">
                   </div>
                 </a>
               </div>
               
-              <button class="mobile-menu-btn" onclick="toggleMenu();" aria-expanded="false" aria-controls="mobileMenu">
+              <button class="mobile-menu-btn" onclick='toggleMenu();'>
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
@@ -70,12 +58,17 @@
           </div>
         </nav>
         
-        <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu" [class.open]="mobileMenuOpen">
           <div class="mobile-menu-content">
-            <a href="index.html">Movies</a>
+            <a href="#movies">Movies</a>
             <a href="#tv">TV Shows</a>
-            <a href="#ftw">Free to Watch</a>
-            <a href="#search">Search</a>
+            <a href="watchlist.html">Watchlist</a>
+            <a href="search.html">Search</a>
+            <div class="mobile-menu-divider"></div>
+            <div class="mobile-auth-buttons">
+              <a (click)="closeMobileMenu()" class="nav-action-link mobile-btn">Login</a>
+              <a (click)="closeMobileMenu()" class="nav-action-primary-link mobile-btn">Sign Up</a>
+            </div>
           </div>
         </div>
       </header>
@@ -91,6 +84,7 @@
                   <span>
                     <input id="txtSearch" type="text" placeholder="search for movie">
                   </span>
+                  <button class="search_action" type="button" aria-label="Search">Search!</button>
                 </form>
               </div>
             </div>
@@ -142,7 +136,7 @@
               </div>
               <div class="sQuery">
                 <div class="search-grid">
-                  <p></p>
+                  <p>go fish</p>
                 </div>
               </div>
             </div>
@@ -153,7 +147,7 @@
           <!-- Lightbox Dialog -->
           <dialog id="movie-hero-dialog" class="lightbox" aria-label="Movie details">
             <!-- <div class="lightbox__backdrop" aria-hidden="true">
-              <img src="" alt="TITLE">
+              <img src="https://image.tmdb.org/t/p/original/eI5XeJqEF7Lt14NswOWjwwRnPXs.jpg" alt="Captain Hook: The Cursed Tides poster">
             </div> -->
             <div class="lightbox__content" role="document">
               <!-- Close -->
@@ -166,11 +160,11 @@
                   <aside class="poster-card" aria-label="Poster">
                     <figure class="poster-card__figure">
                       <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg" alt="Captain Hook: The Cursed Tides poster">
-                      <figcaption class="sr-only">Trailer</figcaption>
+                      <figcaption class="sr-only">Now streaming</figcaption>
                     </figure>
                     <div class="poster-card__cta">
                       <!-- <img src="assets/hooke-logo.svg" class="poster-card__service-logo" alt="Hooke service logo"> -->
-                      <!-- <a href="#watch" class="btn btn--primary">Watch Now</a> -->
+                      <a href="#watch" class="btn btn--primary">Watch Now</a>
                     </div>
                   </aside> <!-- Left: Poster Card -->
 
@@ -193,24 +187,27 @@
                     <!-- Movie Info -->
                     <header class="info-panel__header">
                       <h1 class="title">
-                        <span class="title__alt"></span>
+                        Captain Hook: <span class="title__alt">The Cursed Tides</span>
                         <span class="title__year">(2025)</span>
                       </h1>
                       <ul class="meta">
-                        <li class="release">07/11/2025</li>
-                        <li class="certification">GB</li>
-                        <li class="genres">Adventure, Action, Horror</li>
-                        <li class="runtime">1h 30m</li>
+                        <li>07/11/2025</li>
+                        <li>GB</li>
+                        <li>Adventure, Action, Horror</li>
+                        <li>1h 30m</li>
                       </ul>
                     </header>
 
                     <section class="score-actions" aria-label="User score and actions">
                       <div class="score-badge" aria-label="User Score 49 out of 100">
                         <span class="score-badge__value">49</span>
-                        <!-- <span class="score-badge__label">User Score</span> -->
+                        <span class="score-badge__label">User Score</span>
                       </div>
 
                       <nav class="actions" aria-label="Quick actions">
+                        <button class="icon-btn" aria-label="Add to favorites">❤️</button>
+                        <button class="icon-btn" aria-label="Add to list">➕</button>
+                        <button class="icon-btn" aria-label="Share">🔗</button>
                         <a href="#trailer" class="btn btn--ghost">▶ Play Trailer</a>
                       </nav>
                     </section>
@@ -252,13 +249,13 @@
           <div class="footer-content">
             <div class="footer-section">
               <div class="footer-brand">
-                <a class="footer-brand-link" href="index.html" rel="noopener">
-                  <img class="brand-logo" src="assets/logoFullCropped.png" alt="Fadeout">
+                <a class="footer-brand-link">
+                  <img src="assets/images/filmLogo.png" alt="Fadeout" class="footer-brand-logo">
                   <span class="footer-brand-text"></span>
                 </a>
               </div>
               <p class="footer-description">
-                Fadeout aims to be a high quality and a trusted source of entertainment data.
+                Fadeout aims to be a high quality and trusted source of entertainment data.
               </p>
               <div class="footer-social-links">
                 <a href="#" class="footer-social-link">
@@ -327,43 +324,4 @@
       </footer>
     </div>
   </body>
-  <script>
-    (function () {
-      const btn  = document.querySelector('.mobile-menu-btn');
-      const menu = document.getElementById('mobileMenu');
-
-      if (!btn || !menu) return;
-
-      function openMenu() {
-        menu.classList.add('open');
-        btn.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-        document.documentElement.style.overflow = 'hidden';
-      }
-
-      function closeMenu() {
-        menu.classList.remove('open');
-        btn.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-        document.documentElement.style.overflow = '';
-        btn.focus();
-      }
-
-      // Expose globally for inline onclick
-      window.toggleMenu = function toggleMenu() {
-        menu.classList.contains('open') ? closeMenu() : openMenu();
-      };
-
-      // Close when a link is clicked
-      menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-
-      // Escape closes
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && menu.classList.contains('open')) {
-          e.preventDefault();
-          closeMenu();
-        }
-      });
-    })();
-  </script>
 </html>

@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="css/sections.css">
     <link rel="stylesheet" href="css/lightbox.css">
     <link rel="stylesheet" href="css/badge.css">
-    <script src="js/jquery.js"></script>
     <script src="js/Movie.js" async defer></script>
     <script src="js/TVShow.js" async defer></script>
     <title>Fadeout</title>
@@ -31,7 +30,7 @@
   <body>
     <div class="app">
       <!-- Header Section -->
-      <header class="header" [class.hidden]="isHeaderHidden">
+      <header class="header" id="appHeader">
         <nav class="nav">
           <div class="container">
             <div class="nav-content">
@@ -43,10 +42,10 @@
               </div>
               
               <div class="nav-links">
-                <a href="#movies">Movies</a>
-                <a href="#tv">TV Shows</a>
-                <a href="#ftw">Free to Watch</a>
-                <a href="search.html">Search</a>
+                <a href="#movies" title="Movies" alt="Movies">Movies</a>
+                <a href="#tv" title="TV Shows" alt="TV Shows">TV Shows</a>
+                <a href="#ftw" title="Free to Watch" alt="Free to Watch">Free to Watch</a>
+                <a href="search.html" title="Search" alt="Search">Search</a>
               </div>
               
               <div class="nav-actions">
@@ -72,8 +71,7 @@
                   </div>
                 </a>
               </div>
-              
-              <button class="mobile-menu-btn" onclick='toggleMenu();'>
+              <button class="mobile-menu-btn" onclick="toggleMenu();" aria-expanded="false" aria-controls="mobileMenu">
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
@@ -81,13 +79,13 @@
             </div>
           </div>
         </nav>
-        
-        <div class="mobile-menu">
+
+        <div class="mobile-menu" id="mobileMenu">
           <div class="mobile-menu-content">
-            <a href="#movies">Movies</a>
-            <a href="#tv">TV Shows</a>
-            <a href="#ftw">Free to Watch</a>
-            <a href="search.html">Search</a>
+            <a href="#movies" title="Movies">Movies</a>
+            <a href="#tv" title="TV Shows">TV Shows</a>
+            <a href="#ftw" title="Free to Watch">Free to Watch</a>
+            <a href="search.html" title="Search">Search</a>
           </div>
         </div>
       </header>
@@ -112,11 +110,18 @@
         </section>
         
         <!-- MOVIE SECTION -->
-        <section class="movies" id="movies">
+        <section class="movies">
           <div class="container">
             <div class="section-header">
-              <h2 class="movieHead">Top 100 Trending Movies of the Weeks</h2>
+              <h2 class="movieHead">Top 20 Trending Movies of the Weeks</h2>
+              <div id="pad">
+                <div class="switch-button">
+                  <input class="switch-button-checkbox" type="checkbox"></input>
+                  <label class="switch-button-label" for=""><span class="switch-button-label-span">Today</span></label>
+                </div>
+              </div>
             </div>
+
             <!-- first row -->
             <div class="movie-grid">
               <div class="media-card mCard">
@@ -218,7 +223,13 @@
         <section class="tv" id="tv">
           <div class="container">
             <div class="section-header">
-              <h2 class="tvHead">Top 200 Trending TV Shows of the Week</h2>
+              <h2 class="tvHead">Top 20 Trending TV Shows of the Week</h2>
+              <div id="pad">
+                <div class="switch-button">
+                  <input class="switch-button-checkbox" type="checkbox"></input>
+                  <label class="switch-button-label" for=""><span class="switch-button-label-span">Today</span></label>
+                </div>
+              </div>
             </div>
             <!-- first row -->
             <div class="tv-grid">
@@ -716,7 +727,46 @@
       </footer>
     </div>
   </body>
-  <script src="js/jquery.js"></script>
+  <!-- <script src="js/jquery.js"></script> -->
   <script type="module" src="js/main.js"></script>
   <script src="js/indexLightbox.js" defer></script>
+  <script>
+    (function () {
+      const btn  = document.querySelector('.mobile-menu-btn');
+      const menu = document.getElementById('mobileMenu');
+
+      if (!btn || !menu) return;
+
+      function openMenu() {
+        menu.classList.add('open');
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.documentElement.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        menu.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.documentElement.style.overflow = '';
+        btn.focus();
+      }
+
+      // Expose globally for inline onclick
+      window.toggleMenu = function toggleMenu() {
+        menu.classList.contains('open') ? closeMenu() : openMenu();
+      };
+
+      // Close when a link is clicked
+      menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+      // Escape closes
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('open')) {
+          e.preventDefault();
+          closeMenu();
+        }
+      });
+    })();
+  </script>
 </html>

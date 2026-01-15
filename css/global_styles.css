@@ -9,6 +9,7 @@
   --primary-600: #A87D02; /* slightly darker */
   --primary-700: #8F6B02; /* darker */
   --primary-900: #5A4601; /* very dark for high-contrast elements */
+  --primary-950: #000000; /* very dark for high-contrast elements */
 
   /* Secondary Colors */
 --secondary-50:  #F0FDF4;  /* very light mint */
@@ -95,10 +96,17 @@ body {
   font-family: var(--font-family);
   line-height: var(--line-height-body);
   color: var(--gray-900);
-  background-color: #ffffff;
+  background-color: var(--gray-50);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;         /* prevents accidental horizontal scroll leaks */
+}
+
 
 /* Utility Classes */
 .container {
@@ -169,7 +177,7 @@ body {
 
 .btn2, .ann {
   width: 170px;
-  height: 60px;
+  height: 45px;
   font-size: 30px;
   text-align: center;
   line-height: 10px;

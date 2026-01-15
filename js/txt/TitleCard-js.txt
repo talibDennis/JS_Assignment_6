@@ -1,0 +1,430 @@
+
+// =============================
+// Config
+// =============================
+const API_KEY = 'cb7c7779c5c4232012594c012cf9a701'; // Consider proxying via backend, not shipping client-side
+const BASE_URL = 'https://api.themoviedb.org/3/';
+const DEFAULT_LANGUAGE = 'en-US';
+
+// =============================
+// TitleCard (normalized card VM)
+// =============================
+class TitleCard {
+  constructor({ id, type, title, date, overview, posterPath }) {
+    this.id = id;                  // TMDB id
+    this.type = type;              // 'movie' | 'tv'
+    this.title = title;            // Movie.title or TVShow.name
+    this.date = date;              // release_date or first_air_date
+    this.overview = overview;      // string or null
+    this.posterPath = posterPath;  // raw poster_path (used by getPosterUrl)
+  }
+  getPosterUrl(size = 'w342') {
+    if (!this.posterPath) return 'assets/images/noImage.png';
+    return `https://image.tmdb.org/t/p/${size}${this.posterPath}`;
+  }
+}
+
+// =============================
+// State
+// =============================
+let titles = [];               // TitleCard[]
+let titlePanelOpen = false;
+let currentSearchController = null;
+let debounceTimer = null;
+
+// =============================
+// Utilities
+// =============================
+function safeText(value, fallback = 'Not available') {
+  const s = typeof value === 'string' ? value.trim() : '';
+  return s.length ? s : fallback;
+}
+function truncate(text, max = 150) {
+  const s = typeof text === 'string' ? text : '';
+  return s.length > max ? s.slice(0, max) + '…' : s;
+}
+function clearNode(node) {
+  while (node.firstChild) node.removeChild(node.firstChild);
+}
+function createEl(tag, classNames = [], attrs = {}) {
+  const el = document.createElement(tag);
+  if (classNames.length) el.classList.add(...classNames);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v !== undefined && v !== null) el.setAttribute(k, String(v));
+  }
+  return el;
+}
+
+// =============================
+// Search (multi: movies + TV)
+// =============================
+async function searchTitles({ page = 1, language = DEFAULT_LANGUAGE } = {}) {
+  const queryEl = document.querySelector('#txtSearch');
+  if (!queryEl) {
+    console.warn('searchTitles: #txtSearch not found.');
+    return;
+  }
+  const query = queryEl.value.trim();
+  if (!query) return renderEmptyState('Start typing to search for movies and shows.');
+
+  // Abort any in-flight request
+  if (currentSearchController) currentSearchController.abort();
+  currentSearchController = new AbortController();
+
+  const params = new URLSearchParams({
+    api_key: API_KEY,
+    query,
+    include_adult: 'false',
+    language,
+    page: String(page),
+  });
+  const url = `${BASE_URL}search/multi?${params.toString()}`;
+
+  showLoading();
+  console.log(url);
+
+  try {
+    const resp = await fetch(url, { signal: currentSearchController.signal });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+
+    const mixed = (data.results ?? []).filter(
+      r => r.media_type === 'movie' || r.media_type === 'tv'
+    );
+
+    // Map to TitleCard instances
+    titles = mixed.map(r => new TitleCard({
+      id: r.id,
+      type: r.media_type,                          // 'movie' or 'tv'
+      title: r.media_type === 'movie' ? r.title : r.name,
+      date: r.media_type === 'movie' ? r.release_date : r.first_air_date,
+      overview: r.overview ?? null,
+      posterPath: r.poster_path ?? null,
+    }));
+
+    renderSearchGrid(titles);
+    console.log(titles);
+    // Optional: renderPagination({ page: data.page, totalPages: data.total_pages });
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      console.error(err);
+      renderError('Search failed. Please try again.');
+    }
+  } finally {
+    hideLoading();
+  }
+}
+
+// =============================
+// Renderers
+// =============================
+function renderSearchGrid(items) {
+  const grid = document.querySelector('.search-grid');
+  if (!grid) {
+    console.warn('renderSearchGrid: .search-grid not found.');
+    return;
+  }
+  clearNode(grid);
+
+  if (!items.length) {
+    renderEmptyState('No matches. Try a different query.');
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+
+  items.forEach(t => {
+    const card = createEl('div', ['search-card', 'sCard']);
+
+    // Poster
+    const posterDiv = createEl('div');
+    const poster = createEl('img', ['search-poster'], {
+      alt: t.title || 'Untitled',
+      'data-id': t.id,
+      'data-type': t.type,
+    });
+    poster.src = t.getPosterUrl();
+    posterDiv.appendChild(poster);
+
+    // Details
+    const details = createEl('div', ['sDetails']);
+
+    // Header (title + date + type chip)
+    const header = createEl('div', ['sTitle']);
+
+    const h2 = createEl('h2');
+    h2.textContent = safeText(t.title, 'Untitled');
+
+    const metaRow = createEl('div', ['sMeta']);
+    const date = createEl('span', ['sDate']);
+    date.textContent = safeText(t.date, 'Date not available');
+
+    const typeChip = createEl('span', ['sType']);
+    typeChip.textContent = t.type === 'movie' ? 'Movie' : 'TV Show';
+
+    metaRow.appendChild(date);
+    metaRow.appendChild(typeChip);
+
+    header.appendChild(h2);
+    header.appendChild(metaRow);
+
+    // Overview
+    const body = createEl('div', ['sOverview']);
+    const p = createEl('p');
+    p.textContent = truncate(safeText(t.overview, 'Overview not available'), 150);
+
+    body.appendChild(p);
+    details.appendChild(header);
+    details.appendChild(body);
+
+    // Assemble card
+    card.appendChild(posterDiv);
+    card.appendChild(details);
+
+    frag.appendChild(card);
+  });
+
+  grid.appendChild(frag);
+}
+
+function renderEmptyState(message) {
+  const grid = document.querySelector('.search-grid');
+  if (!grid) return;
+  clearNode(grid);
+  const p = createEl('p', ['empty']);
+  p.textContent = message;
+  grid.appendChild(p);
+}
+
+function renderError(message) {
+  const grid = document.querySelector('.search-grid');
+  if (!grid) return;
+  clearNode(grid);
+  const p = createEl('p', ['error']);
+  p.textContent = message;
+  grid.appendChild(p);
+}
+
+// =============================
+// Details (type-aware)
+// =============================
+async function getTitleDetails({ id, type }) {
+  if (!id || !type) return;
+
+  const params = new URLSearchParams({
+    api_key: API_KEY,
+    language: DEFAULT_LANGUAGE,
+  });
+  const path = type === 'movie' ? `movie/${id}` : `tv/${id}`;
+  const url = `${BASE_URL}${path}?${params.toString()}`;
+
+  showLoadingPanel();
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const json = await response.json();
+    const model = (type === 'movie') ? Movie.fromJson(json) : TVShow.fromJson(json);
+
+    // If it's a movie, try to fetch a trailer key (optional)
+    if (type === 'movie' && model && !model.trailerKey) {
+      try {
+        const vidsUrl = `${BASE_URL}movie/${id}/videos?${params.toString()}`;
+        const vidsResp = await fetch(vidsUrl);
+        if (vidsResp.ok) {
+          const vidsJson = await vidsResp.json();
+          const yt = (vidsJson.results || []).find(v => v.site === 'YouTube' && v.type === 'Trailer');
+          if (yt) model.trailerKey = yt.key;
+        }
+      } catch (_) {}
+    }
+
+    // Open the lightbox with the model
+    window.openMovieDialog(model);
+
+  } catch (err) {
+    console.error(err);
+    renderErrorPanel && renderErrorPanel('Unable to load details. Please try again.');
+  } finally {
+    hideLoadingPanel();
+  }
+}
+
+// lightbox.js (refactored)
+(function renderLightbox() {
+  const dialog = document.getElementById('movie-hero-dialog');
+  if (!dialog) return;
+
+  const closeBtn = dialog.querySelector('.lightbox__close');
+  const triggers = document.querySelectorAll('[data-dialog="movie-hero-dialog"]');
+  let previousActive = null;
+
+  // --- existing open logic ---
+  function openDialog() {
+    previousActive = document.activeElement;
+
+
+    if (typeof dialog.showModal === 'function') {
+      dialog.showModal();
+      document.documentElement.style.overflow = 'hidden'; // lock scroll
+    } else {
+    
+      dialog.setAttribute('open', '');
+      document.body.classList.add('no-scroll');
+    }
+    
+    // Focus a sensible element
+    const focusable = dialog.querySelector('.lightbox__close');
+    (focusable ?? dialog).focus();
+  }
+
+  function stopEmbeddedVideo() {
+    const iframe = dialog.querySelector('.video-embed__frame');
+    if (iframe) {
+      const src = iframe.getAttribute('src');
+      iframe.setAttribute('src', src); // reload to stop playback
+    }
+  }
+
+  function closeDialog() {
+    stopEmbeddedVideo();
+    if (typeof dialog.close === 'function') {
+      dialog.close();
+      document.documentElement.style.overflow = '';
+    } else {
+      dialog.removeAttribute('open');
+      document.body.classList.remove('no-scroll');
+    }
+    if (previousActive) previousActive.focus();
+  }
+
+  // --- NEW: populate dialog from a Movie instance ---
+
+function setDialogFromMovie(movie) {
+  // Poster
+  const posterEl = dialog.querySelector('.poster-card img');
+  if (posterEl) {
+    posterEl.src = movie.getPosterUrl ? movie.getPosterUrl('w780') : movie.posterUrl || '';
+    posterEl.alt = movie.title ?? 'Poster';
+  }
+
+  // Title + (year)
+  const titleEl = dialog.querySelector('h1.title');
+  const yearEl  = dialog.querySelector('.title__year');
+  if (titleEl) titleEl.firstChild && (titleEl.firstChild.nodeType === 3)
+    ? (titleEl.firstChild.nodeValue = (movie.title ?? 'Untitled') + ' ')
+    : (titleEl.textContent = (movie.title ?? 'Untitled'));
+  if (yearEl) yearEl.textContent = movie.releaseDate
+    ? `(${new Date(movie.releaseDate).getFullYear()})`
+    : '';
+
+  // Meta list: release date is first <li>
+  const metaEls = dialog.querySelectorAll('.meta li');
+  if (metaEls && metaEls[0]) {
+    metaEls[0].textContent = movie.releaseDate ?? 'Date not available';
+  }
+
+  // Score
+  const scoreEl = dialog.querySelector('.score-badge__value');
+  if (scoreEl) {
+    const score = (movie.getScorePercentage && movie.getScorePercentage()) || (typeof movie.voteAverage === 'number' ? Math.round(movie.voteAverage * 10).toString() : '–');
+    scoreEl.textContent = score;
+  }
+
+  // Overview
+  const overviewP = dialog.querySelector('.overview p');
+  if (overviewP) {
+    overviewP.textContent = movie.overview ?? '';
+  }
+
+  // Trailer (optional)
+  const iframeEl = dialog.querySelector('.video-embed__frame');
+  if (iframeEl) {
+    if (movie.trailerKey) {
+      iframeEl.src = `https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
+      iframeEl.hidden = false;
+    } else {
+      iframeEl.hidden = true;
+      iframeEl.removeAttribute('src');
+    }
+  }
+}
+
+
+  // --- NEW: public function to open dialog with a movie ---
+  function openMovieDialog(movie) {
+    setDialogFromMovie(movie);        // populate using the Movie class
+    openDialog();                     // reuse your existing open routine
+  }
+
+  // Open handlers
+  // Keep your existing trigger wiring (optional)
+  triggers.forEach(t => t.addEventListener('click', openDialog));
+  // Close handlers
+  // Close handlers & accessibility (unchanged)
+  closeBtn.addEventListener('click', closeDialog);
+
+  // Click outside to close (only for native dialog)
+  dialog.addEventListener('click', (e) => {
+    const content = dialog.querySelector('.lightbox__content').getBoundingClientRect();
+    const inContent =
+      e.clientX >= content.left && e.clientX <= content.right &&
+      e.clientY >= content.top  && e.clientY <= content.bottom;
+    if (!inContent) closeDialog();
+  });
+
+  // ESC to close
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      closeDialog();
+    }
+    // basic focus trap (unchanged)
+    if (e.key === 'Tab') {
+      const focusables = [...dialog.querySelectorAll(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )].filter(el => el.offsetParent !== null);
+      if (!focusables.length) return;
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // Expose the helper for your card grid
+  window.openMovieDialog = openMovieDialog;
+})();
+
+
+// =============================
+// Non-blocking UI feedback (stub)
+// =============================
+function showLoading() { /* add spinner logic here */ }
+function hideLoading() {}
+function showLoadingPanel() {}
+function hideLoadingPanel() {}
+
+// =============================
+// Event wiring
+// =============================
+
+// Debounce input to limit requests
+const searchInput = document.querySelector('#txtSearch');
+if (searchInput) {
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => searchTitles({ page: 1 }), 300);
+  });
+}
+
+// Delegate clicks from grid to details
+const searchGridEl = document.querySelector('.search-grid');
+if (searchGridEl) {
+  searchGridEl.addEventListener('click', (evt) => {
+    const img = evt.target.closest('img.search-poster');
+    if (!img) return;
+    const id = img.getAttribute('data-id');
+    const type = img.getAttribute('data-type'); // 'movie' | 'tv'
+    getTitleDetails({ id, type });
+  });
+}

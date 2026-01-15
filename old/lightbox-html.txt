@@ -1,0 +1,98 @@
+        <section> <!-- Lightbox -->
+          <!-- Lightbox Dialog -->
+          <dialog id="movie-hero-dialog" class="lightbox" aria-label="Movie details">
+            <!-- <div class="lightbox__backdrop" aria-hidden="true">
+              <img src="https://image.tmdb.org/t/p/original/eI5XeJqEF7Lt14NswOWjwwRnPXs.jpg" alt="Captain Hook: The Cursed Tides poster">
+            </div> -->
+            <div class="lightbox__content" role="document">
+              <!-- Close -->
+              <button class="lightbox__close" aria-label="Close">✕</button>
+
+              <!-- === Movie Details Layout === -->
+              <section class="movie-hero" aria-label="Movie details">
+                <div class="movie-hero__content">
+                  <!-- Left: Poster Card -->
+                  <aside class="poster-card" aria-label="Poster">
+                    <figure class="poster-card__figure">
+                      <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg" alt="Captain Hook: The Cursed Tides poster">
+                      <figcaption class="sr-only">Now streaming</figcaption>
+                    </figure>
+                    <div class="poster-card__cta">
+                      <!-- <img src="assets/hooke-logo.svg" class="poster-card__service-logo" alt="Hooke service logo"> -->
+                      <a href="#watch" class="btn btn--primary">Watch Now</a>
+                    </div>
+                  </aside> <!-- Left: Poster Card -->
+
+                  <!-- Right: Info Panel -->
+                  <div class="info-panel">
+
+                    <!-- Movie Trailer -->
+                    <div class="video-embed" aria-label="Trailer">
+                      <iframe
+                        class="video-embed__frame"
+                        src="https://www.youtube-nocookie.com/embed/VVrs2GQmUOs?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1"
+                        title="Captain Hook: The Cursed Tides — Trailer"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                        referrerpolicy="strict-origin-when-cross-origin">
+                      </iframe>
+                    </div>
+
+                    <!-- Movie Info -->
+                    <header class="info-panel__header">
+                      <h1 class="title">
+                        Captain Hook: <span class="title__alt">The Cursed Tides</span>
+                        <span class="title__year">(2025)</span>
+                      </h1>
+                      <ul class="meta">
+                        <li>07/11/2025</li>
+                        <li>GB</li>
+                        <li>Adventure, Action, Horror</li>
+                        <li>1h 30m</li>
+                      </ul>
+                    </header>
+
+                    <section class="score-actions" aria-label="User score and actions">
+                      <div class="score-badge" aria-label="User Score 49 out of 100">
+                        <span class="score-badge__value">49</span>
+                        <span class="score-badge__label">User Score</span>
+                      </div>
+
+                      <nav class="actions" aria-label="Quick actions">
+                        <button class="icon-btn" aria-label="Add to favorites">❤️</button>
+                        <button class="icon-btn" aria-label="Add to list">➕</button>
+                        <button class="icon-btn" aria-label="Share">🔗</button>
+                        <a href="#trailer" class="btn btn--ghost">▶ Play Trailer</a>
+                      </nav>
+                    </section>
+
+                    <p class="tagline">Blood flows like the tide.</p>
+
+                    <section class="overview">
+                      <h2 class="sr-only">Overview</h2>
+                      <p>
+                        In the aftermath of a devastating defeat by his archenemesis Admiral Smee,
+                        Captain Hook finds refuge in the coastal town of Eldritch Landing.
+                      </p>
+                    </section>
+
+                    <section class="credits">
+                      <div class="credit">
+                        <span class="credit__name">Lars Janssen</span>
+                        <span class="credit__role">Director, Writer</span>
+                      </div>
+                      <div class="credit">
+                        <span class="credit__name">J.M. Barrie</span>
+                        <span class="credit__role">Writer</span>
+                      </div>
+                    </section>
+                  </div> <!-- Right: Info Panel -->
+                </div> <!-- Movie Details Content -->
+
+                <!-- Background image for the hero -->
+                <div class="movie-hero__bg" role="img" aria-label="Background art"></div>
+              </section> <!-- === /Movie Details Layout === -->
+            </div> <!-- Lightbox Content -->
+          </dialog> <!-- Lightbox Dialog -->
+        </section> <!-- Lightbox -->

@@ -1,7 +1,8 @@
 .app {
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
+  /* background-color: var(--gray-900); */
 }
 
 .main-content {

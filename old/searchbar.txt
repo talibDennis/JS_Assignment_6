@@ -1,0 +1,35 @@
+<div class="search">
+  <form id="inner_search_form">
+    <label class="inner_search_wrapper">
+      <span>
+        <input id="txtSearch" type="text" autocorrect="off" autofill="off" autocomplete="off" spellcheck="true" placeholder="search for movies & tv shows....." inputmode="text" aria-label="Search Input">
+      </span>
+    </label>
+    <input class="search_action" type="submit" value="Search" data-role="button" role="button" aria-disabled="false" onclick="getTrendingMovies();" aria-label="Search Button">
+  </form>
+</div>
+
+
+            <div class="search-bar">
+              <input id="txtSearch" type="text" placeholder="search for movie">
+              <button type=" button" onclick="searchMovies();">Search!</button>
+            </div>
+
+              <!-- Trigger(s) -->
+        <section>
+          <div>
+            <div>
+              <div>
+                <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg"
+                alt="Captain Hook: The Cursed Tides poster"
+                class="poster-trigger"
+                data-dialog="movie-hero-dialog">
+              </div>
+              <div>
+                <button class="open-hero btn btn--primary" data-dialog="movie-hero-dialog">
+                  View Sample
+                </button>
+              </div>
+            </div>
+          </div>
+        </section> <!-- Search Box -->

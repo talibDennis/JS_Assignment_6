@@ -13,7 +13,7 @@ function renderMovies(movies, max) {
   const grid = document.querySelector('.movie-grid');
   if (!head || !grid) return;
 
-  head.textContent = `Top ${max} Trending Movies of the Week`;
+  head.textContent = 'Movies Trending';
   grid.innerHTML = '';
 
   movies.forEach(show => {

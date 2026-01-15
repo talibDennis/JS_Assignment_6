@@ -13,7 +13,7 @@ function renderTV(tvShows, max) {
   const grid = document.querySelector('.tv-grid');
   if (!head || !grid) return;
 
-  head.textContent = `Top ${max} Trending TV Shows of the Week`;
+  head.textContent = 'TV Shows Trending';
   grid.innerHTML = '';
   
   tvShows.forEach(show => {
