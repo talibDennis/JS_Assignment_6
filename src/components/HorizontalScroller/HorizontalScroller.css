@@ -1,0 +1,73 @@
+
+/* HorizontalScroller.css */
+.scroller-section {
+  margin: 1.5rem 0;
+}
+
+.scroller-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .75rem;
+}
+
+.scroller-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.scroller-controls {
+  display: flex;
+  gap: .5rem;
+}
+
+.scroller-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: inherit;
+  padding: .35rem .6rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.scroller-btn:hover { background: rgba(255,255,255,0.15); }
+
+.scroller {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  gap: 16px;
+
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+
+  /* Scroll Snap */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  padding: 4px 2px 12px 2px; /* breathing room under cards */
+}
+
+.scroller::-webkit-scrollbar {
+  height: 8px;
+}
+.scroller::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 8px;
+}
+
+.scroller-item {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  /* Set a consistent card width; adjust per breakpoint */
+  width: 180px;
+}
+
+@media (min-width: 640px) {
+  .scroller-item { width: 200px; }
+}
+
+@media (min-width: 1024px) {
+  .scroller-item { width: 220px; }
+}

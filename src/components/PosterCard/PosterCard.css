@@ -1,0 +1,87 @@
+
+.poster-card {
+  width: 100%;
+  max-width: 220px; /* keep in sync with your scroller item width at larger breakpoints */
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
+}
+
+.poster-card[role="button"] {
+  cursor: pointer;
+}
+
+.poster-thumb {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111827; /* fallback bg */
+  aspect-ratio: 2 / 3; /* 300x450 proportion */
+}
+
+.poster-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: translateZ(0);
+}
+
+.poster-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(17, 24, 39, 0.8);
+  color: #fbbf24; /* amber */
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
+
+.poster-meta {
+  margin-top: 8px;
+}
+
+.poster-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.poster-sub {
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  color: #9ca3af; /* gray-400 */
+}
+
+.poster-stars {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.star {
+  color: #374151; /* gray-700 for empty */
+}
+
+.star.filled {
+  color: #f59e0b; /* amber-500 */
+}
+
+/* Hover effect */
+.poster-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 0 rgba(255,255,255,0);
+  transition: box-shadow .2s ease;
+}
+.poster-card:hover .poster-thumb::after {
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2);
+}
