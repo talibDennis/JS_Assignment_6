@@ -327,38 +327,38 @@
 }
 
 #pad {
-  padding: 0 30px 30px;
+  padding: 0 20px 30px;
 }
 
 .switch-button {
-  background: rgba(255, 255, 255, 0.56);
+  background: var(--gray-50);
   border-radius: 30px;
   overflow: hidden;
-  /* height: 40px; */
-  width: 240px;
+  height: 32px;
+  width: 220px;
   text-align: center;
-  border: 2px solid black;
+  border: 1px solid black;
   font-size: 18px;
   letter-spacing: 1px;
-  color: var(--primary-950);
+  color: var(--primary-500);
   position: relative;
-  padding-right: 120px;
+  padding-right: 100px;
 }
 
 .switch-button::before {
   content: "This Week";
   position: absolute;
   top: 0;
-  bottom: 0;
+  bottom: 3px;
   right: 0;
-  width: 120px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3;
   pointer-events: none;
   top: 5px;
-  font-size: 1.3rem;
+  font-size: 1rem;
 }
 
 .switch-button-checkbox {
@@ -374,16 +374,16 @@
 }
 
 .switch-button-label {
-  position: relative;
-  height: 40px;
-  padding: 15px 0;
+  position: absolute;
+  height: 30px;
+  padding: 15px 25px;
   display: block;
   user-select: none;
 }
 
 .switch-button-label::before {
   content: "";
-  background: #155FFF;
+  background: var(--primary-900);
   height: 100%;
   width: 100%;
   position: absolute;
@@ -400,8 +400,8 @@
 
 .switch-button-label-span {
   position: relative;
-  bottom: 8px;
-  font-size: 1.3rem;
+  bottom: 15px;
+  font-size: 1rem;
 }
 
 
@@ -544,17 +544,17 @@
 
 .section-header {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   /* align-items: center; */
   align-content: center;
-  text-align: center;
+  text-align: left;
   padding: 0 40px;
   /* margin-bottom: var(--space-6); */
   /* text-align: left; */
 }
 
 .section-header h2 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: var(--space-4);
 }
@@ -1656,8 +1656,8 @@
   .section-header {
     display: grid;
     text-align: left;
-    padding: 0 40px;
-    margin-bottom: var(--space-6) !important;
+    padding: 0;
+    margin-bottom: var(--space-1) !important;
   }
   /* Cart mobile adjustments */
   .cart-page {
