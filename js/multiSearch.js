@@ -317,7 +317,7 @@ async function getTitleDetails({ id, type }) {
       if (yt) model.trailerKey = yt.key;
     }
 
-    // ✅ Open the lightbox. If you implemented openTitleDialog(model, type), use that instead.
+    // Open lightbox
     window.openMovieDialog
       ? window.openMovieDialog(model)
       : window.openTitleDialog(model, type);
@@ -342,7 +342,7 @@ async function getTitleDetails({ id, type }) {
   const triggers = document.querySelectorAll('[data-dialog="movie-hero-dialog"]');
   let previousActive = null;
 
-  // --- existing open logic ---
+  // --- open logic ---
   function openDialog() {
     previousActive = document.activeElement;
 
@@ -380,188 +380,184 @@ async function getTitleDetails({ id, type }) {
     if (previousActive) previousActive.focus();
   }
 
-  // --- NEW: populate dialog from a Movie instance ---
+  // --- populate dialog from Movie instance ---
+  function setDialogFromMovie(movie) {
+    const posterEl   = dialog.querySelector('.poster-card img');
+    const titleEl    = dialog.querySelector('h1.title');
+    const yearEl     = dialog.querySelector('.title__year');
+    const metaEls    = dialog.querySelectorAll('.meta li');
+    const scoreEl    = dialog.querySelector('.score-badge__value');
+    const taglineEl  = dialog.querySelector('.tagline');
+    const overviewP  = dialog.querySelector('.overview p');
+    const creditsBox = dialog.querySelector('.credits');
 
+    // Poster
+    if (posterEl) { posterEl.src = movie.getPosterUrl('w780'); posterEl.alt = movie.title ?? 'Poster'; }
 
-function setDialogFromMovie(movie) {
-  const posterEl   = dialog.querySelector('.poster-card img');
-  const titleEl    = dialog.querySelector('h1.title');
-  const yearEl     = dialog.querySelector('.title__year');
-  const metaEls    = dialog.querySelectorAll('.meta li');
-  const scoreEl    = dialog.querySelector('.score-badge__value');
-  const taglineEl  = dialog.querySelector('.tagline');
-  const overviewP  = dialog.querySelector('.overview p');
-  const creditsBox = dialog.querySelector('.credits');
-
-  // Poster
-  if (posterEl) { posterEl.src = movie.getPosterUrl('w780'); posterEl.alt = movie.title ?? 'Poster'; }
-
-  // Title + year
-  if (titleEl) titleEl.childNodes[0] && titleEl.childNodes[0].nodeType === 3
-    ? (titleEl.childNodes[0].nodeValue = (movie.title ?? 'Untitled') + ' ')
-    : (titleEl.textContent = (movie.title ?? 'Untitled'));
-  if (yearEl && movie.releaseDate) {
-    const y = movie.releaseDate.slice(0,4);
-    yearEl.textContent = /^\d{4}$/.test(y) ? `(${y})` : '';
-  }
-
-  // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime)
-  if (metaEls[0]) {
-    const pretty = formatTMDBDate(movie.releaseDate, 'en-US');
-    metaEls[0].textContent = pretty ?? 'Date not available';
-  }
-  if (metaEls[1]) metaEls[1].textContent = movie.certification ? movie.certification : '';
-  if (metaEls[2]) metaEls[2].textContent = formatGenres(movie.genres);
-  if (metaEls[3]) metaEls[3].textContent = formatRuntime(movie.runtime);
-
-  // Score
-  if (scoreEl) scoreEl.textContent = movie.getScorePercentage();
-
-  // Tagline
-  if (taglineEl) taglineEl.textContent = movie.tagline ?? '';
-
-  // Overview
-  if (overviewP) overviewP.textContent = movie.overview ?? '';
-
-  // Credits
-  if (creditsBox) {
-    creditsBox.innerHTML = '';
-    const top = selectTopCredits(movie.credits, 'movie');
-    top.forEach(({ name, role }) => {
-      const c = document.createElement('div');
-      c.className = 'credit';
-      c.innerHTML = `<span class="credit__name">${name}</span><span class="credit__role">${role}</span>`;
-      creditsBox.appendChild(c);
-    });
-  }
-
-  // Trailer (create if needed, remove if missing)
-  const embedWrapper = dialog.querySelector('.video-embed');
-  let iframeEl = dialog.querySelector('.video-embed__frame');
-
-  if (movie.trailerKey) {
-    // Ensure iframe exists
-    if (!iframeEl && embedWrapper) {
-      iframeEl = document.createElement('iframe');
-      iframeEl.className = 'video-embed__frame';
-      iframeEl.title = 'Trailer';
-      iframeEl.loading = 'lazy';
-      iframeEl.allow =
-        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
-      iframeEl.referrerPolicy = 'strict-origin-when-cross-origin';
-      iframeEl.allowFullscreen = true;
-      embedWrapper.appendChild(iframeEl);
+    // Title + year
+    if (titleEl) titleEl.childNodes[0] && titleEl.childNodes[0].nodeType === 3
+      ? (titleEl.childNodes[0].nodeValue = (movie.title ?? 'Untitled') + ' ')
+      : (titleEl.textContent = (movie.title ?? 'Untitled'));
+    if (yearEl && movie.releaseDate) {
+      const y = movie.releaseDate.slice(0,4);
+      yearEl.textContent = /^\d{4}$/.test(y) ? `(${y})` : '';
     }
-    if (iframeEl) {
-      iframeEl.src =
-        `https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
-      iframeEl.hidden = false;
+
+    // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime)
+    if (metaEls[0]) {
+      const pretty = formatTMDBDate(movie.releaseDate, 'en-US');
+      metaEls[0].textContent = pretty ?? 'Date not available';
     }
-  } else {
-    // No trailer: remove iframe element entirely
-    if (iframeEl && iframeEl.parentNode) {
-      iframeEl.parentNode.removeChild(iframeEl);
+    if (metaEls[1]) metaEls[1].textContent = movie.certification ? movie.certification : '';
+    if (metaEls[2]) metaEls[2].textContent = formatGenres(movie.genres);
+    if (metaEls[3]) metaEls[3].textContent = formatRuntime(movie.runtime);
+
+    // Score
+    if (scoreEl) scoreEl.textContent = movie.getScorePercentage();
+
+    // Tagline
+    if (taglineEl) taglineEl.textContent = movie.tagline ?? '';
+
+    // Overview
+    if (overviewP) overviewP.textContent = movie.overview ?? '';
+
+    // Credits
+    if (creditsBox) {
+      creditsBox.innerHTML = '';
+      const top = selectTopCredits(movie.credits, 'movie');
+      top.forEach(({ name, role }) => {
+        const c = document.createElement('div');
+        c.className = 'credit';
+        c.innerHTML = `<span class="credit__name">${name}</span><span class="credit__role">${role}</span>`;
+        creditsBox.appendChild(c);
+      });
     }
-  }
-}
 
-function setDialogFromTV(show) {
-  const posterEl   = dialog.querySelector('.poster-card img');
-  const titleEl    = dialog.querySelector('h1.title');
-  const yearEl     = dialog.querySelector('.title__year');
-  const metaEls    = dialog.querySelectorAll('.meta li');
-  const scoreEl    = dialog.querySelector('.score-badge__value');
-  const taglineEl  = dialog.querySelector('.tagline');
-  const overviewP  = dialog.querySelector('.overview p');
-  const creditsBox = dialog.querySelector('.credits');
+    // Trailer (create if needed, remove if missing)
+    const embedWrapper = dialog.querySelector('.video-embed');
+    let iframeEl = dialog.querySelector('.video-embed__frame');
 
-  // Poster
-  if (posterEl) { posterEl.src = show.getPosterUrl('w780'); posterEl.alt = show.name ?? 'Poster'; }
-
-  // Title + year
-  if (titleEl) titleEl.childNodes[0] && titleEl.childNodes[0].nodeType === 3
-    ? (titleEl.childNodes[0].nodeValue = (show.name ?? 'Untitled') + ' ')
-    : (titleEl.textContent = (show.name ?? 'Untitled'));
-  if (yearEl && show.firstAirDate) yearEl.textContent = `(${new Date(show.firstAirDate).getFullYear()})`;
-
-  // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime/episode)
-  if (metaEls[0]) {
-    const pretty = formatTMDBDate(show.firstAirDate, 'en-US');
-    metaEls[0].textContent = pretty ?? 'Date not available';
-  }
-  if (metaEls[1]) metaEls[1].textContent = show.certification ? show.certification : '';
-  if (metaEls[2]) metaEls[2].textContent = formatGenres(show.genres);
-  if (metaEls[3]) {
-    const avg = show.averageEpisodeRuntime; // your helper returns avg minutes
-    metaEls[3].textContent = avg ? `${formatRuntime(avg)} per episode` : '';
-  }
-
-  // Score
-  if (scoreEl) scoreEl.textContent = show.getScorePercentage();
-
-  // Tagline
-  if (taglineEl) taglineEl.textContent = show.tagline ?? '';
-
-  // Overview
-  if (overviewP) overviewP.textContent = show.overview ?? '';
-
-  // Credits
-  if (creditsBox) {
-    creditsBox.innerHTML = '';
-    const top = selectTopCredits(show.credits, 'tv');
-    top.forEach(({ name, role }) => {
-      const c = document.createElement('div');
-      c.className = 'credit';
-      c.innerHTML = `<span class="credit__name">${name}</span><span class="credit__role">${role}</span>`;
-      creditsBox.appendChild(c);
-    });
-  }
-
-
-  // Trailer (create if needed, remove if missing)
-  const embedWrapper = dialog.querySelector('.video-embed');
-  let iframeEl = dialog.querySelector('.video-embed__frame');
-
-  if (show.trailerKey) {
-    if (!iframeEl && embedWrapper) {
-      iframeEl = document.createElement('iframe');
-      iframeEl.className = 'video-embed__frame';
-      iframeEl.title = 'Trailer';
-      iframeEl.loading = 'lazy';
-      iframeEl.allow =
-        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
-      iframeEl.referrerPolicy = 'strict-origin-when-cross-origin';
-      iframeEl.allowFullscreen = true;
-      embedWrapper.appendChild(iframeEl);
-    }
-    if (iframeEl) {
-      iframeEl.src =
-        `https://www.youtube.com/embed/${show.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
-      iframeEl.hidden = false;
-    }
-  } else {
-    if (iframeEl && iframeEl.parentNode) {
-      iframeEl.parentNode.removeChild(iframeEl);
+    if (movie.trailerKey) {
+      // Ensure iframe exists
+      if (!iframeEl && embedWrapper) {
+        iframeEl = document.createElement('iframe');
+        iframeEl.className = 'video-embed__frame';
+        iframeEl.title = 'Trailer';
+        iframeEl.loading = 'lazy';
+        iframeEl.allow =
+          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframeEl.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframeEl.allowFullscreen = true;
+        embedWrapper.appendChild(iframeEl);
+      }
+      if (iframeEl) {
+        iframeEl.src =
+          `https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
+        iframeEl.hidden = false;
+      }
+    } else {
+      // No trailer: remove iframe element entirely
+      if (iframeEl && iframeEl.parentNode) {
+        iframeEl.parentNode.removeChild(iframeEl);
+      }
     }
   }
-}
 
-  // --- NEW: public function to open dialog with a movie ---
+  function setDialogFromTV(show) {
+    const posterEl   = dialog.querySelector('.poster-card img');
+    const titleEl    = dialog.querySelector('h1.title');
+    const yearEl     = dialog.querySelector('.title__year');
+    const metaEls    = dialog.querySelectorAll('.meta li');
+    const scoreEl    = dialog.querySelector('.score-badge__value');
+    const taglineEl  = dialog.querySelector('.tagline');
+    const overviewP  = dialog.querySelector('.overview p');
+    const creditsBox = dialog.querySelector('.credits');
 
+    // Poster
+    if (posterEl) { posterEl.src = show.getPosterUrl('w780'); posterEl.alt = show.name ?? 'Poster'; }
+
+    // Title + year
+    if (titleEl) titleEl.childNodes[0] && titleEl.childNodes[0].nodeType === 3
+      ? (titleEl.childNodes[0].nodeValue = (show.name ?? 'Untitled') + ' ')
+      : (titleEl.textContent = (show.name ?? 'Untitled'));
+    if (yearEl && show.firstAirDate) yearEl.textContent = `(${new Date(show.firstAirDate).getFullYear()})`;
+
+    // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime/episode)
+    if (metaEls[0]) {
+      const pretty = formatTMDBDate(show.firstAirDate, 'en-US');
+      metaEls[0].textContent = pretty ?? 'Date not available';
+    }
+    if (metaEls[1]) metaEls[1].textContent = show.certification ? show.certification : '';
+    if (metaEls[2]) metaEls[2].textContent = formatGenres(show.genres);
+    if (metaEls[3]) {
+      const avg = show.averageEpisodeRuntime; // the helper returns avg minutes
+      metaEls[3].textContent = avg ? `${formatRuntime(avg)} per episode` : '';
+    }
+
+    // Score
+    if (scoreEl) scoreEl.textContent = show.getScorePercentage();
+
+    // Tagline
+    if (taglineEl) taglineEl.textContent = show.tagline ?? '';
+
+    // Overview
+    if (overviewP) overviewP.textContent = show.overview ?? '';
+
+    // Credits
+    if (creditsBox) {
+      creditsBox.innerHTML = '';
+      const top = selectTopCredits(show.credits, 'tv');
+      top.forEach(({ name, role }) => {
+        const c = document.createElement('div');
+        c.className = 'credit';
+        c.innerHTML = `<span class="credit__name">${name}</span><span class="credit__role">${role}</span>`;
+        creditsBox.appendChild(c);
+      });
+    }
+
+
+    // Trailer
+    const embedWrapper = dialog.querySelector('.video-embed');
+    let iframeEl = dialog.querySelector('.video-embed__frame');
+
+    if (show.trailerKey) {
+      if (!iframeEl && embedWrapper) {
+        iframeEl = document.createElement('iframe');
+        iframeEl.className = 'video-embed__frame';
+        iframeEl.title = 'Trailer';
+        iframeEl.loading = 'lazy';
+        iframeEl.allow =
+          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframeEl.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframeEl.allowFullscreen = true;
+        embedWrapper.appendChild(iframeEl);
+      }
+      if (iframeEl) {
+        iframeEl.src =
+          `https://www.youtube.com/embed/${show.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
+        iframeEl.hidden = false;
+      }
+    } else {
+      if (iframeEl && iframeEl.parentNode) {
+        iframeEl.parentNode.removeChild(iframeEl);
+      }
+    }
+  }
+
+  // --- public function: open dialog with a movie ---
   function openTitleDialog(model, type) {
     if (type === 'movie') setDialogFromMovie(model);
     else setDialogFromTV(model);
-    openDialog();                     // reuse your existing open routine
+    openDialog();
   }
 
   // Open handlers
-  // Keep your existing trigger wiring (optional)
   triggers.forEach(t => t.addEventListener('click', openDialog));
   // Close handlers
-  // Close handlers & accessibility (unchanged)
+  // Close handlers & accessibility
   closeBtn.addEventListener('click', closeDialog);
 
-  // Click outside to close (only for native dialog)
+  // Click outside to close
   dialog.addEventListener('click', (e) => {
     const content = dialog.querySelector('.lightbox__content').getBoundingClientRect();
     const inContent =
@@ -576,7 +572,7 @@ function setDialogFromTV(show) {
       e.stopPropagation();
       closeDialog();
     }
-    // basic focus trap (unchanged)
+    // basic focus trap
     if (e.key === 'Tab') {
       const focusables = [...dialog.querySelectorAll(
         'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'

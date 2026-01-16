@@ -1,14 +1,42 @@
 
+// ===== Toggle & helpers =====
+const movieToggle = document.getElementById('movie-switch-button-checkbox');
 
-export async function loadMovies({ apiKey, baseUrl, max = 20 }) {
-  const res = await fetch(`${baseUrl}trending/movie/week?api_key=${apiKey}`);
-  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-  const data = await res.json();
-  const items = (data.results ?? []).map(Movie.fromJson);
-  renderMovies(items, max);
+function getPeriod() {
+  // Checked => "week", Unchecked => "day"
+  return movieToggle?.checked ? 'week' : 'day';
 }
 
-// date prettier
+// Let main.js decide what to do when the toggle changes
+export function wireMovieToggle(onChange) {
+  if (!movieToggle) return;
+  movieToggle.addEventListener('change', () => {
+    onChange?.(getPeriod());
+  });
+}
+
+// Public API: loadMovies({ apiKey, baseUrl, max })
+export async function loadMovies({ apiKey, baseUrl, max = 6 }) {
+  const period = getPeriod() ?? 'day';
+  const url = `${baseUrl}trending/movie/${period}?api_key=${apiKey}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    const items = (data.results ?? []).map(Movie.fromJson);
+    renderMovies(items, max);
+  } catch (err) {
+    console.error('Failed to load movies:', err);
+    renderMovies([], 0); // degrade gracefully
+  }
+}
+
+
+// =============================
+// Helpers
+// =============================
+
+// date format: string (YYYY-MM-DD) to "Mon D, YYYY"
 function formatTMDBDate(dateStr, locale = 'en-US') {
   if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
   const [y, m, d] = dateStr.split('-').map(Number);
@@ -21,6 +49,10 @@ function formatTMDBDate(dateStr, locale = 'en-US') {
   }).format(date);
 }
 
+
+// =============================
+// Render movie cards
+// =============================
 function renderMovies(movies, max) {
   const head = document.querySelector('.movieHead');
   const grid = document.querySelector('.movie-grid');
@@ -29,7 +61,10 @@ function renderMovies(movies, max) {
   head.textContent = 'Movies Trending';
   grid.innerHTML = '';
 
-  movies.forEach(show => {
+  // Limit if max is provided
+  const list = Number.isFinite(max) ? movies.slice(0, max) : movies;
+
+  list.forEach((show) => {
     // *********** Card *************
     const mCardDiv = document.createElement('div');
     mCardDiv.classList.add('media-card', 'mCard');
@@ -41,11 +76,16 @@ function renderMovies(movies, max) {
     const posterDiv = document.createElement('div');
     const poster = document.createElement('img');
     poster.classList.add('media-poster');
+
     const posterUrl = show.getPosterUrl();
     poster.src = posterUrl;
     poster.alt = show.title || 'Untitled';
     poster.id = show.id;
-    poster.addEventListener('click', () => getMovieDetails?.(show.id));
+
+    poster.addEventListener("click", () => {
+      window.getMovieDetails?.(show.id);
+    });
+    // console.log(getTitleDetails)
 
     // *********** Score ***********
     const mScoreActions = document.createElement('div');
@@ -58,7 +98,6 @@ function renderMovies(movies, max) {
     score.classList.add('iScore-badge__value');
 
     const mScore = show.getScorePercentage(); // Convert to percentage
-    console.log(mScore);
 
     score.textContent = mScore;
     // Apply color class based on score
@@ -91,6 +130,7 @@ function renderMovies(movies, max) {
     // >>>> build DOM <<<<<
     mScoreBadge.appendChild(score);
     mScoreActions.appendChild(mScoreBadge);
+    
     posterDiv.appendChild(poster);
     mIconDiv.append(posterDiv, mScoreActions);
 

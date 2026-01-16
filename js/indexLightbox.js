@@ -38,6 +38,49 @@ function selectTopCredits(credits, type = 'movie') {
   const closeBtn = dialog.querySelector('.lightbox__close');
   let previousActive = null;
 
+  // --- Trailer helpers ---
+  function ensureTrailerIframe(dialog) {
+    const wrapper = dialog.querySelector('.video-embed');
+    if (!wrapper) return null;
+
+    let iframe = dialog.querySelector('.video-embed__frame');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.className = 'video-embed__frame';
+      iframe.title = 'Trailer';
+      iframe.loading = 'lazy';
+      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      wrapper.appendChild(iframe);
+    }
+    return iframe;
+  }
+
+  function setTrailer(dialog, youtubeKey) {
+    // If there is no trailer, remove any existing iframe so we don't show an empty box
+    const existing = dialog.querySelector('.video-embed__frame');
+    if (!youtubeKey) {
+      if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+      return;
+    }
+    const iframe = ensureTrailerIframe(dialog);
+    if (iframe) {
+      iframe.src =
+        `https://www.youtube.com/embed/${youtubeKey}` +
+        `?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
+      iframe.hidden = false;
+    }
+  }
+
+  function stopTrailer(dialog) {
+    const iframe = dialog.querySelector('.video-embed__frame');
+    if (iframe && iframe.parentNode) {
+      // Remove the iframe entirely so playback stops and a new click recreates it fresh
+      iframe.parentNode.removeChild(iframe);
+    }
+  }
+
   function openDialog() {
     previousActive = document.activeElement;
     if (typeof dialog.showModal === 'function') {
@@ -49,7 +92,11 @@ function selectTopCredits(credits, type = 'movie') {
     }
     (closeBtn ?? dialog).focus();
   }
+
   function closeDialog() {
+    // stop/remove trailer on close
+    stopTrailer(dialog);
+
     if (typeof dialog.close === 'function') {
       dialog.close();
       document.documentElement.style.overflow = '';
@@ -87,7 +134,10 @@ function selectTopCredits(credits, type = 'movie') {
     if (metaEls[3]) metaEls[3].textContent = formatRuntime(movie.runtime);
 
     if (scoreEl) scoreEl.textContent = movie.getScorePercentage();
+
     if (trailerEl) trailerEl.href = `https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
+    
+    
     if (taglineEl) taglineEl.textContent = movie.tagline ?? '';
     if (overviewP) overviewP.textContent = movie.overview ?? '';
 
@@ -101,7 +151,8 @@ function selectTopCredits(credits, type = 'movie') {
       });
     }
 
-
+    // NEW: set or remove the trailer iframe
+    setTrailer(dialog, movie.trailerKey);
   }
 
   // ---- Populate for TV ----
@@ -147,6 +198,9 @@ function selectTopCredits(credits, type = 'movie') {
         creditsBox.appendChild(c);
       });
     }
+
+    // NEW: set or remove the trailer iframe
+    setTrailer(dialog, show.trailerKey);
   }
 
   function openTitleDialog(model, type) {

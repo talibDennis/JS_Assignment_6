@@ -116,7 +116,7 @@
               <h2 class="movieHead">Top 20 Trending Movies of the Weeks</h2>
               <div id="pad">
                 <div class="switch-button">
-                  <input class="switch-button-checkbox" type="checkbox"></input>
+                  <input class="switch-button-checkbox" id="movie-switch-button-checkbox" type="checkbox"></input>
                   <label class="switch-button-label" for=""><span class="switch-button-label-span">Today</span></label>
                 </div>
               </div>
@@ -228,7 +228,7 @@
               <h2 class="tvHead">Top 20 Trending TV Shows of the Week</h2>
               <div id="pad">
                 <div class="switch-button">
-                  <input class="switch-button-checkbox" type="checkbox"></input>
+                  <input class="switch-button-checkbox" id="tv-switch-button-checkbox" type="checkbox"></input>
                   <label class="switch-button-label" for=""><span class="switch-button-label-span">Today</span></label>
                 </div>
               </div>
@@ -343,8 +343,25 @@
               <div class="ftw-grid">
                 <div class="media-card mCard">
                   <div class="media-icon">
+                    <!-- <a href="https://www.hoopladigital.com/title/12184109" target="_blank" title="The Hollow" alt="The Hollow"> -->
+                      <img class="media-poster" id="79948" src="https://image.tmdb.org/t/p/original/9sDgeNu67umBkX209Yh78d4tyv9.jpg" title="The Hollow" alt="The Hollow">
+                    <!-- </a> -->
+                    <div class="iScore-actions">
+                      <div class="iScore-badge">
+                        <span class="iScore-badge__value">68%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mDetails">
+                    <h3 class="movie-title">The Hollow</h3>
+                    <span class="movie-date">Jun 8, 2018</span>
+                  </div>
+                </div>
+
+                <div class="media-card mCard">
+                  <div class="media-icon">
                     <a href="https://www.hoopladigital.com/title/12184109" target="_blank" title="xXx" alt="xXx">
-                      <img class="media-poster" src="https://image.tmdb.org/t/p/original/huN6fCbX5P0wFIZZdtY0pHi2OjY.jpg" alt="xXx">
+                      <img class="media-poster" id="7451" src="https://image.tmdb.org/t/p/original/huN6fCbX5P0wFIZZdtY0pHi2OjY.jpg" alt="xXx">
                     </a>
                     <div class="iScore-actions">
                       <div class="iScore-badge">
@@ -637,10 +654,28 @@
                       <img src="https://image.tmdb.org/t/p/original/7SHFZKfd270y47sXN2WsURUO3ml.jpg" alt="Captain Hook: The Cursed Tides poster">
                       <figcaption class="sr-only">Trailer</figcaption>
                     </figure>
+                    <div class="poster-card__cta">
+                      <!-- <img src="assets/hooke-logo.svg" class="poster-card__service-logo" alt="Hooke service logo"> -->
+                      <!-- <a href="#watch" class="btn btn--primary">Watch Now</a> -->
+                    </div>
                   </aside> <!-- Left: Poster Card -->
 
                   <!-- Right: Info Panel -->
                   <div class="info-panel">
+
+                    <!-- Movie Trailer -->
+                    <div class="video-embed" aria-label="Trailer">
+                      <iframe
+                        class="video-embed__frame"
+                        src=""
+                        title="Captain Hook: The Cursed Tides — Trailer"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                        referrerpolicy="strict-origin-when-cross-origin">
+                      </iframe>
+                    </div>
+
                     <!-- Movie Info -->
                     <header class="info-panel__header">
                       <h1 class="title">
@@ -662,7 +697,7 @@
                       </div>
 
                       <nav class="actions" aria-label="Quick actions">
-                        <a href="#trailer" class="btn btn--ghost" target="_blank" rel="noopener">▶ Play Trailer</a>
+                        <a href="#trailer" class="btn btn--ghost">▶ Play Trailer</a>
                       </nav>
                     </section>
 
