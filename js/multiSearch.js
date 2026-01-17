@@ -11,12 +11,12 @@ const DEFAULT_LANGUAGE = 'en-US';
 // =============================
 class TitleCard {
   constructor({ id, type, title, date, overview, posterPath }) {
-    this.id = id;                  // TMDB id
-    this.type = type;              // 'movie' | 'tv'
-    this.title = title;            // Movie.title or TVShow.name
-    this.date = date;              // release_date or first_air_date
-    this.overview = overview;      // string or null
-    this.posterPath = posterPath;  // raw poster_path (used by getPosterUrl)
+    this.id = id;
+    this.type = type; // 'movie' | 'tv'
+    this.title = title; // Movie.title or TVShow.name
+    this.date = date; // release_date or first_air_date
+    this.overview = overview;
+    this.posterPath = posterPath;
   }
   getPosterUrl(size = 'w342') {
     if (!this.posterPath) return 'assets/images/noImage.png';
@@ -27,7 +27,7 @@ class TitleCard {
 // =============================
 // State
 // =============================
-let titles = [];               // TitleCard[]
+let titles = [];
 let titlePanelOpen = false;
 let currentSearchController = null;
 let debounceTimer = null;
@@ -55,7 +55,7 @@ function createEl(tag, classNames = [], attrs = {}) {
   return el;
 }
 
-// Parse "YYYY-MM-DD" without timezone surprises and format as "June 11, 2022".
+// parse "YYYY-MM-DD" without timezone surprises and format as "June 11, 2022".
 function formatTMDBDate(dateStr, locale = 'en-US') {
   if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
   const [y, m, d] = dateStr.split('-').map(Number);
@@ -84,7 +84,7 @@ function selectTopCredits(credits, type = 'movie') {
   const crew = Array.isArray(credits.crew) ? credits.crew : [];
   const cast = Array.isArray(credits.cast) ? credits.cast : [];
 
-  // Prioritize Director & Writer for movies; Creator/Director/Writer for TV; then top-billed cast
+  // prioritize director & writer for movies; creator/director/writer for TV; then top-billed cast
   const roles = (type === 'movie')
     ? ['Director', 'Writer', 'Screenplay']
     : ['Creator', 'Director', 'Writer', 'Screenplay'];
@@ -111,7 +111,7 @@ async function searchTitles({ page = 1, language = DEFAULT_LANGUAGE } = {}) {
   const query = queryEl.value.trim();
   if (!query) return renderEmptyState('Start typing to search for movies and shows.');
 
-  // Abort any in-flight request
+  // abort any in-flight request
   if (currentSearchController) currentSearchController.abort();
   currentSearchController = new AbortController();
 
@@ -136,7 +136,7 @@ async function searchTitles({ page = 1, language = DEFAULT_LANGUAGE } = {}) {
       r => r.media_type === 'movie' || r.media_type === 'tv'
     );
 
-    // Map to TitleCard instances
+    // map to TitleCard instances
     titles = mixed.map(r => new TitleCard({
       id: r.id,
       type: r.media_type,                          // 'movie' or 'tv'
@@ -148,7 +148,7 @@ async function searchTitles({ page = 1, language = DEFAULT_LANGUAGE } = {}) {
 
     renderSearchGrid(titles);
     console.log(titles);
-    // Optional: renderPagination({ page: data.page, totalPages: data.total_pages });
+    // optional: renderPagination({ page: data.page, totalPages: data.total_pages });
   } catch (err) {
     if (err.name !== 'AbortError') {
       console.error(err);
@@ -190,10 +190,10 @@ function renderSearchGrid(items) {
     poster.src = t.getPosterUrl();
     posterDiv.appendChild(poster);
 
-    // Details
+    // details
     const details = createEl('div', ['sDetails']);
 
-    // Header (title + date + type chip)
+    // header (title + date + type chip)
     const header = createEl('div', ['sTitle']);
 
     const h2 = createEl('h2');
@@ -213,7 +213,7 @@ function renderSearchGrid(items) {
     header.appendChild(h2);
     header.appendChild(metaRow);
 
-    // Overview
+    // overview
     const body = createEl('div', ['sOverview']);
     const p = createEl('p');
     p.textContent = truncate(safeText(t.overview, 'Overview not available'), 150);
@@ -222,7 +222,7 @@ function renderSearchGrid(items) {
     details.appendChild(header);
     details.appendChild(body);
 
-    // Assemble card
+    // assemble card
     card.appendChild(posterDiv);
     card.appendChild(details);
 
@@ -272,7 +272,7 @@ async function getTitleDetails({ id, type }) {
 
     const model = (type === 'movie') ? Movie.fromJson(json) : TVShow.fromJson(json);
 
-    // Collect extra requests: certification, credits, videos (trailer)
+    // collect extra requests: certification, credits, videos (trailer)
     const extras = [];
     if (type === 'movie') {
       extras.push(fetch(`${BASE_URL}movie/${id}/release_dates?${params.toString()}`)); // certification
@@ -317,7 +317,7 @@ async function getTitleDetails({ id, type }) {
       if (yt) model.trailerKey = yt.key;
     }
 
-    // Open lightbox
+    // open lightbox
     window.openMovieDialog
       ? window.openMovieDialog(model)
       : window.openTitleDialog(model, type);
@@ -356,7 +356,7 @@ async function getTitleDetails({ id, type }) {
       document.body.classList.add('no-scroll');
     }
     
-    // Focus a sensible element
+    // focus a sensible element
     const focusable = dialog.querySelector('.lightbox__close');
     (focusable ?? dialog).focus();
   }
@@ -391,10 +391,10 @@ async function getTitleDetails({ id, type }) {
     const overviewP  = dialog.querySelector('.overview p');
     const creditsBox = dialog.querySelector('.credits');
 
-    // Poster
+    // poster
     if (posterEl) { posterEl.src = movie.getPosterUrl('w780'); posterEl.alt = movie.title ?? 'Poster'; }
 
-    // Title + year
+    // title + year
     if (titleEl) titleEl.childNodes[0] && titleEl.childNodes[0].nodeType === 3
       ? (titleEl.childNodes[0].nodeValue = (movie.title ?? 'Untitled') + ' ')
       : (titleEl.textContent = (movie.title ?? 'Untitled'));
@@ -403,7 +403,7 @@ async function getTitleDetails({ id, type }) {
       yearEl.textContent = /^\d{4}$/.test(y) ? `(${y})` : '';
     }
 
-    // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime)
+    // meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime)
     if (metaEls[0]) {
       const pretty = formatTMDBDate(movie.releaseDate, 'en-US');
       metaEls[0].textContent = pretty ?? 'Date not available';
@@ -412,16 +412,16 @@ async function getTitleDetails({ id, type }) {
     if (metaEls[2]) metaEls[2].textContent = formatGenres(movie.genres);
     if (metaEls[3]) metaEls[3].textContent = formatRuntime(movie.runtime);
 
-    // Score
+    // score
     if (scoreEl) scoreEl.textContent = movie.getScorePercentage();
 
-    // Tagline
+    // tagline
     if (taglineEl) taglineEl.textContent = movie.tagline ?? '';
 
-    // Overview
+    // overview
     if (overviewP) overviewP.textContent = movie.overview ?? '';
 
-    // Credits
+    // credits
     if (creditsBox) {
       creditsBox.innerHTML = '';
       const top = selectTopCredits(movie.credits, 'movie');
@@ -433,12 +433,12 @@ async function getTitleDetails({ id, type }) {
       });
     }
 
-    // Trailer (create if needed, remove if missing)
+    // trailer (create if needed, remove if missing)
     const embedWrapper = dialog.querySelector('.video-embed');
     let iframeEl = dialog.querySelector('.video-embed__frame');
 
     if (movie.trailerKey) {
-      // Ensure iframe exists
+      // ensure iframe exists
       if (!iframeEl && embedWrapper) {
         iframeEl = document.createElement('iframe');
         iframeEl.className = 'video-embed__frame';
@@ -456,7 +456,7 @@ async function getTitleDetails({ id, type }) {
         iframeEl.hidden = false;
       }
     } else {
-      // No trailer: remove iframe element entirely
+      // no trailer: remove iframe element entirely
       if (iframeEl && iframeEl.parentNode) {
         iframeEl.parentNode.removeChild(iframeEl);
       }
@@ -473,16 +473,16 @@ async function getTitleDetails({ id, type }) {
     const overviewP  = dialog.querySelector('.overview p');
     const creditsBox = dialog.querySelector('.credits');
 
-    // Poster
+    // poster
     if (posterEl) { posterEl.src = show.getPosterUrl('w780'); posterEl.alt = show.name ?? 'Poster'; }
 
-    // Title + year
+    // title + year
     if (titleEl) titleEl.childNodes[0] && titleEl.childNodes[0].nodeType === 3
       ? (titleEl.childNodes[0].nodeValue = (show.name ?? 'Untitled') + ' ')
       : (titleEl.textContent = (show.name ?? 'Untitled'));
     if (yearEl && show.firstAirDate) yearEl.textContent = `(${new Date(show.firstAirDate).getFullYear()})`;
 
-    // Meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime/episode)
+    // meta list (index-based: 0 release, 1 certification, 2 genres, 3 runtime/episode)
     if (metaEls[0]) {
       const pretty = formatTMDBDate(show.firstAirDate, 'en-US');
       metaEls[0].textContent = pretty ?? 'Date not available';
@@ -494,16 +494,16 @@ async function getTitleDetails({ id, type }) {
       metaEls[3].textContent = avg ? `${formatRuntime(avg)} per episode` : '';
     }
 
-    // Score
+    // score
     if (scoreEl) scoreEl.textContent = show.getScorePercentage();
 
-    // Tagline
+    // tagline
     if (taglineEl) taglineEl.textContent = show.tagline ?? '';
 
-    // Overview
+    // overview
     if (overviewP) overviewP.textContent = show.overview ?? '';
 
-    // Credits
+    // credits
     if (creditsBox) {
       creditsBox.innerHTML = '';
       const top = selectTopCredits(show.credits, 'tv');
@@ -516,7 +516,7 @@ async function getTitleDetails({ id, type }) {
     }
 
 
-    // Trailer
+    // trailer
     const embedWrapper = dialog.querySelector('.video-embed');
     let iframeEl = dialog.querySelector('.video-embed__frame');
 
@@ -551,13 +551,13 @@ async function getTitleDetails({ id, type }) {
     openDialog();
   }
 
-  // Open handlers
+  // pen handlers
   triggers.forEach(t => t.addEventListener('click', openDialog));
-  // Close handlers
-  // Close handlers & accessibility
+  // close handlers
+  // close handlers & accessibility
   closeBtn.addEventListener('click', closeDialog);
 
-  // Click outside to close
+  // click outside to close
   dialog.addEventListener('click', (e) => {
     const content = dialog.querySelector('.lightbox__content').getBoundingClientRect();
     const inContent =
@@ -584,7 +584,7 @@ async function getTitleDetails({ id, type }) {
     }
   });
 
-  // Expose the helper for your card grid
+  // expose the helper for your card grid
   window.openTitleDialog = openTitleDialog;
 })();
 
@@ -610,7 +610,7 @@ if (searchInput) {
   });
 }
 
-// Delegate clicks from grid to details
+// delegate clicks from grid to details
 const searchGridEl = document.querySelector('.search-grid');
 if (searchGridEl) {
   searchGridEl.addEventListener('click', (evt) => {

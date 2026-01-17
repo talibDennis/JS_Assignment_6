@@ -3,11 +3,11 @@
 const movieToggle = document.getElementById('movie-switch-button-checkbox');
 
 function getPeriod() {
-  // Checked => "week", Unchecked => "day"
+  // checked => "week", Unchecked => "day"
   return movieToggle?.checked ? 'week' : 'day';
 }
 
-// Let main.js decide what to do when the toggle changes
+// let main.js decide what to do when the toggle changes
 export function wireMovieToggle(onChange) {
   if (!movieToggle) return;
   movieToggle.addEventListener('change', () => {
@@ -15,7 +15,7 @@ export function wireMovieToggle(onChange) {
   });
 }
 
-// Public API: loadMovies({ apiKey, baseUrl, max })
+// public API: loadMovies({ apiKey, baseUrl, max })
 export async function loadMovies({ apiKey, baseUrl, max = 6 }) {
   const period = getPeriod() ?? 'day';
   const url = `${baseUrl}trending/movie/${period}?api_key=${apiKey}`;
@@ -35,7 +35,6 @@ export async function loadMovies({ apiKey, baseUrl, max = 6 }) {
 // =============================
 // Helpers
 // =============================
-
 // date format: string (YYYY-MM-DD) to "Mon D, YYYY"
 function formatTMDBDate(dateStr, locale = 'en-US') {
   if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
@@ -61,7 +60,7 @@ function renderMovies(movies, max) {
   head.textContent = 'Movies Trending';
   grid.innerHTML = '';
 
-  // Limit if max is provided
+  // limit if max is provided
   const list = Number.isFinite(max) ? movies.slice(0, max) : movies;
 
   list.forEach((show) => {
@@ -97,14 +96,13 @@ function renderMovies(movies, max) {
     const score = document.createElement('span');
     score.classList.add('iScore-badge__value');
 
-    const mScore = show.getScorePercentage(); // Convert to percentage
+    const mScore = show.getScorePercentage(); // convert to percentage
 
     score.textContent = mScore;
-    // Apply color class based on score
     const nScore = Number(show.voteAverage) || 0;
     console.log(nScore);
 
-    // Apply color class based on score
+    // apply color class based on score
     if (nScore >= 7) {
       mScoreBadge.classList.add('iScore-badge', 'score-high'); // Green
     } else if (nScore >= 5) {

@@ -3,11 +3,11 @@
 const tvToggle = document.getElementById('tv-switch-button-checkbox');
 
 function getPeriod() {
-  // Checked => "week", Unchecked => "day"
+  // checked => "week", Unchecked => "day"
   return tvToggle?.checked ? 'week' : 'day';
 }
 
-// Let main.js decide what to do when the toggle changes
+// let main.js decide what to do when the toggle changes
 export function wireTvToggle(onChange) {
   if (!tvToggle) return;
   tvToggle.addEventListener('change', () => {
@@ -15,7 +15,7 @@ export function wireTvToggle(onChange) {
   });
 }
 
-// Public API: loadShows({ apiKey, baseUrl, max })
+// public API: loadShows({ apiKey, baseUrl, max })
 export async function loadTV({ apiKey, baseUrl, max = 6 }) {
   const period = getPeriod() ?? 'day';
   const url = `${baseUrl}trending/tv/${period}?api_key=${apiKey}`;
@@ -61,7 +61,7 @@ function renderTV(tvShows, max) {
   head.textContent = 'TV Shows Trending';
   grid.innerHTML = '';
 
-  // Limit if max is provided
+  // limit if max is provided
   const list = Number.isFinite(max) ? tvShows.slice(0, max) : tvShows;
   
   list.forEach(show => {
@@ -100,11 +100,11 @@ function renderTV(tvShows, max) {
     console.log(mScore);
 
     score.textContent = mScore;
-    // Apply color class based on score
+    // apply color class based on score
     const nScore = Number(show.voteAverage) || 0;
     console.log(nScore);
 
-    // Apply color class based on score
+    // apply color class based on score
     if (nScore >= 7) {
       mScoreBadge.classList.add('iScore-badge', 'score-high'); // Green
     } else if (nScore >= 5) {

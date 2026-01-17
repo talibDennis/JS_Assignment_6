@@ -16,10 +16,10 @@ class TVShow {
     status = null,
     type = null,
     inProduction = null,
-    nextEpisodeToAir = null,  // object or null
+    nextEpisodeToAir = null, // object or null
     numberOfSeasons = null,
     numberOfEpisodes = null,
-    episodeRunTime = [],       // minutes; often an array
+    episodeRunTime = [], // minutes; often an array
     networks = [],
     productionCompanies = [],
     originCountry = [],
@@ -28,8 +28,8 @@ class TVShow {
     popularity = 0,
     tagline = null,
     homepage = null,
-    certification = null,            // NEW (e.g., "TV-MA")
-    credits = {cast: [], crew: []}, // NEW
+    certification = null, // (e.g., "TV-MA")
+    credits = {cast: [], crew: []},
   ) {
 
     this.id = id;
@@ -62,8 +62,8 @@ class TVShow {
     this.popularity = popularity;
     this.tagline = tagline;
     this.homepage = homepage;
-    this.certification = certification;      // NEW
-    this.credits = credits;                  // NEW
+    this.certification = certification;
+    this.credits = credits;
   }
 
   static fromJson(json) {
@@ -98,8 +98,8 @@ class TVShow {
       Number(json.popularity) || 0,
       json.tagline ?? null,
       json.homepage ?? null,
-      json.certification ?? null,               // certification to be set after extra fetch     
-      json.credits = { cast: [], crew: [] },       // credits to be set after extra fetch
+      json.certification ?? null, // certification to be set after extra fetch     
+      json.credits = { cast: [], crew: [] }, // credits to be set after extra fetch
     );
   }
 
@@ -120,7 +120,7 @@ class TVShow {
     return Number.isNaN(d.getTime()) ? null : d.getUTCFullYear();
   }
 
-  // Use the first runtime or average if you prefer
+  // use the first runtime or average if you prefer
   get averageEpisodeRuntime() {
     if (!Array.isArray(this.episodeRunTime) || this.episodeRunTime.length === 0) return null;
     const sum = this.episodeRunTime.reduce((a, b) => a + b, 0);

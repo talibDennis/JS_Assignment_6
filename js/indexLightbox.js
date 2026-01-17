@@ -4,7 +4,7 @@ const API_KEY = 'cb7c7779c5c4232012594c012cf9a701';
 const BASE_URL = 'https://api.themoviedb.org/3/';
 const DEFAULT_LANGUAGE = 'en-US';
 
-// ====== Helpers (same ones you used on search) ======
+// ====== Helpers ======
 function formatRuntime(mins) {
   if (!Number.isFinite(mins) || mins <= 0) return '';
   const h = Math.floor(mins / 60);
@@ -38,7 +38,7 @@ function selectTopCredits(credits, type = 'movie') {
   const closeBtn = dialog.querySelector('.lightbox__close');
   let previousActive = null;
 
-  // --- Trailer helpers ---
+  // --- trailer helpers ---
   function ensureTrailerIframe(dialog) {
     const wrapper = dialog.querySelector('.video-embed');
     if (!wrapper) return null;
@@ -58,7 +58,7 @@ function selectTopCredits(credits, type = 'movie') {
   }
 
   function setTrailer(dialog, youtubeKey) {
-    // If there is no trailer, remove any existing iframe so we don't show an empty box
+    // if no trailer, remove any existing iframe
     const existing = dialog.querySelector('.video-embed__frame');
     if (!youtubeKey) {
       if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
@@ -76,7 +76,7 @@ function selectTopCredits(credits, type = 'movie') {
   function stopTrailer(dialog) {
     const iframe = dialog.querySelector('.video-embed__frame');
     if (iframe && iframe.parentNode) {
-      // Remove the iframe entirely so playback stops and a new click recreates it fresh
+      // remove the iframe entirely so playback stops
       iframe.parentNode.removeChild(iframe);
     }
   }
@@ -151,7 +151,7 @@ function selectTopCredits(credits, type = 'movie') {
       });
     }
 
-    // NEW: set or remove the trailer iframe
+    // set or remove the trailer iframe
     setTrailer(dialog, movie.trailerKey);
   }
 
@@ -199,7 +199,7 @@ function selectTopCredits(credits, type = 'movie') {
       });
     }
 
-    // NEW: set or remove the trailer iframe
+    // set or remove the trailer iframe
     setTrailer(dialog, show.trailerKey);
   }
 
@@ -209,7 +209,7 @@ function selectTopCredits(credits, type = 'movie') {
     openDialog();
   }
 
-  // Close handlers + accessibility
+  // close handlers + accessibility
   closeBtn?.addEventListener('click', closeDialog);
   dialog.addEventListener('click', (e) => {
     const rect = dialog.querySelector('.lightbox__content').getBoundingClientRect();

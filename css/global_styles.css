@@ -5,18 +5,18 @@
   /* Primary Colors */
   --primary-50: #eff6ff;
   --primary-100: #dbeafe;
-  --primary-500: #BA8B02; /* base (your color) */
-  --primary-600: #A87D02; /* slightly darker */
-  --primary-700: #8F6B02; /* darker */
-  --primary-900: #5A4601; /* very dark for high-contrast elements */
-  --primary-950: #000000; /* very dark for high-contrast elements */
+  --primary-500: #BA8B02;
+  --primary-600: #A87D02;
+  --primary-700: #8F6B02;
+  --primary-900: #5A4601;
+  --primary-950: #000000;
 
   /* Secondary Colors */
---secondary-50:  #F0FDF4;  /* very light mint */
---secondary-100: #DCFCE7;  /* soft pastel green */
---secondary-500: #22C55E;  /* vibrant emerald green */
---secondary-600: #16A34A;  /* deeper green for hover */
---secondary-700: #15803D;  /* dark green for accents */
+--secondary-50:  #F0FDF4;
+--secondary-100: #DCFCE7;
+--secondary-500: #22C55E;
+--secondary-600: #16A34A; /* deeper green for hover */
+--secondary-700: #15803D; /* dark green for accents */
 
 
   /* Accent Colors */

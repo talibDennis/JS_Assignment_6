@@ -9,13 +9,13 @@ class Movie {
     this.posterPath = posterPath;
     this.voteAverage = voteAverage;
     this.genres = Array.isArray(genres) ? genres : [];
-    this.runtime = runtime;     // minutes
+    this.runtime = runtime; // minutes
     this.adult = adult;
     this.video = video;
-    this.status = status;       // "Released", "Post Production", etc.
-    this.tagline = tagline;                 // NEW
-    this.certification = certification;     // NEW
-    this.credits = credits;                 // NEW
+    this.status = status; // "Released", "Post Production", etc.
+    this.tagline = tagline;
+    this.certification = certification;
+    this.credits = credits;
   }
 
   static fromJson(json) {
@@ -32,10 +32,10 @@ class Movie {
       json.adult ?? false,
       json.video ?? false,
       json.status ?? null,
-      json.tagline ?? null,                     // NEW
-      json.tagline ?? null,                     // NEW
-      json.certification ?? null,               // certification to be set after extra fetch     
-      json.credits = { cast: [], crew: [] },       // credits to be set after extra fetch
+      json.tagline ?? null,
+      json.tagline ?? null,
+      json.certification ?? null, // certification to be set after extra fetch     
+      json.credits = { cast: [], crew: [] }, // credits to be set after extra fetch
     );
   }
   
