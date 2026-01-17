@@ -107,28 +107,33 @@
         </section>
         
         <!-- MOVIE SECTION -->
-        <section class="movies">
-          <div class="container">
-            <div class="section-header">
-              <label class="switch">
-                <input type="checkbox" id="myToggle">
-                <span class="slider"></span>
-              </label>
-            </div>
 
-            <!-- first row -->
-            <div class="scroller">
-              <div class="movie-grid">
-                <div class="media-card mCard">
-                  <div class="switch-button">
-                  <input id="switch-button-checkbox" type="checkbox"></input>
-                  <label class="switch-button-label" for=""><span class="switch-button-label-span">Today</span></label>
-                </div>
-                </div>
+          <div class="section-header">
+            <h2 class="movieHead">Top 20 Trending Movies of the Weeks</h2>
+            <div id="pad">
+              <div class="switch-button">
+                <input class="switch-button-checkbox" id="movie-switch-button-checkbox" type="checkbox"></input>
+                <label class="switch-button-label" for="">
+                  <span class="switch-button-label-span">Today</span>
+                </label>
               </div>
             </div>
+
+            <!-- NEW: scroller controls (left/right buttons) -->
+            <div class="scroller-controls" role="group" aria-label="Trending Movies controls">
+              <button type="button" class="scroller-btn" id="movies-left" aria-label="Scroll left">◀</button>
+              <button type="button" class="scroller-btn" id="movies-right" aria-label="Scroll right">▶</button>
+            </div>
           </div>
-        </section>
+
+          <!-- NEW: scroller with ID -->
+          <div class="scroller" id="movies-row" role="list" tabindex="0" aria-roledescription="Horizontal scroller">
+            <div class="movie-grid">
+              <!-- keep your existing cards as-is -->
+              ...
+            </div>
+          </div>
+
       </main>
 
       <!-- FOOTER SECTION -->

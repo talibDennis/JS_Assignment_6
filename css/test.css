@@ -1,50 +1,110 @@
-
-/* The container */
-.switch {
+/* Keep your container styles as-is */
+.switch-button {
+  background: var(--gray-50);
+  border-radius: 30px;
+  overflow: hidden;
+  height: 32px;
+  width: 250px;
+  text-align: center;
+  border: 1px solid black;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: rgb(99, 205, 99);
+  font-weight: 500;
   position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 26px;
+  padding-right: 100px; /* keeps space for the slider translation */
 }
 
-/* Hide the real checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
+/* Checkbox overlay stays the same */
+.switch-button-checkbox {
   cursor: pointer;
-  background-color: #672727;
-  border-radius: 34px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: 0.4s;
-}
-
-/* Circle */
-.slider:before {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2;
+}
+
+/* Label becomes a pill with two words inside */
+.switch-button-label {
+  position: absolute;
+  height: 30px;
+  padding: 0 14px; /* tighter so both words fit nicely */
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .75rem;
+  user-select: none;
+  inset: 1px 1px 1px 1px;   /* pin to the container edges */
+  border-radius: 30px;
+  line-height: 30px;
+  color: var(--primary-500);
+  z-index: 1; /* sits under the invisible checkbox */
+  transition: color 300ms ease;
+}
+
+/* Slider "background" that moves (kept from your code) */
+.switch-button-label::before {
   content: "";
-  height: 20px;
-  width: 20px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.4s;
+  background: var(--primary-900);
+  height: 100%;
+  width: 120px;             /* width of the sliding segment */
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 30px;
+  transform: translateX(0);
+  transition: transform 300ms;
+  z-index: -1;              /* sit behind the text */
 }
 
-/* When checked */
-input:checked + .slider {
-  background-color: #4CAF50;
+/* When checked, slide the background to cover "This Week" */
+.switch-button-checkbox:checked + .switch-button-label::before {
+  transform: translateX(120px); /* same distance you used */
 }
 
-input:checked + .slider:before {
-  transform: translateX(24px);
+/* --- Option A: active word styling --- */
+
+/* Base style for both words */
+.switch-button-label-span {
+  position: relative;
+  font-size: 1rem;
+  opacity: .6;                  /* muted by default */
+  transition: opacity .2s ease, color .2s ease, text-shadow .2s ease;
+}
+
+/* Default (unchecked) — "Today" is active */
+.switch-button-checkbox:not(:checked) + .switch-button-label .today {
+  opacity: 1;
+  color: green;
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
+}
+
+/* Checked — "This Week" is active */
+.switch-button-checkbox:checked + .switch-button-label .week {
+  opacity: 1;
+  color: green;
+  text-shadow: 0 0 6px rgba(255,255,255,.45);
+}
+
+/* Optional: subtle gold underline for the active word */
+.switch-button-label-span.today,
+.switch-button-label-span.week {
+  /* create space for underline if desired */
+}
+
+.switch-button-checkbox:not(:checked) + .switch-button-label .today::after,
+.switch-button-checkbox:checked + .switch-button-label .week::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 2px;
+  background: linear-gradient(90deg, #BA8B02, #F0C419, #BA8B02);
+  border-radius: 2px;
+}
+
+/* Optional: add overall glow when ON (matches your brand) */
+.switch-button-checkbox:checked + .switch-button-label {
+  color: var(--primary-500);
 }
